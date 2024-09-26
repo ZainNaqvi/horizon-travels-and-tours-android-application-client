@@ -19,6 +19,7 @@ export 'package:horizon_travel_and_tours_android_application/core/common/compone
 export 'package:horizon_travel_and_tours_android_application/screens/auth/presentation/pages/signup_page.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/auth/presentation/pages/signin_page.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/auth/presentation/pages/onboarding_page.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/home/presentation/home_screen.dart';
 
 // Utils
 export 'package:horizon_travel_and_tours_android_application/core/utils/navigator_util.dart';

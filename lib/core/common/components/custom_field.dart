@@ -32,7 +32,7 @@ class CustomField extends StatelessWidget {
     this.boxShadow,
     this.textStyle,
     this.hintStyle,
-    this.cursorColor = AppColor.blue,
+    this.cursorColor = Colors.blue,
     this.fontSize = 20,
     this.maxLines = 1,
     this.width,
@@ -84,7 +84,7 @@ class CustomField extends StatelessWidget {
             inputFormatters: inputFormatters,
             style: textStyle ??
                 TextStyle(
-                  color: AppColor.black,
+                  color: Colors.black,
                   fontSize: fontSize,
                 ),
             decoration: InputDecoration(

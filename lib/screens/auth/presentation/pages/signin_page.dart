@@ -1,3 +1,5 @@
+import 'package:horizon_travel_and_tours_android_application/screens/home/presentation/home_screen.dart';
+
 import '../../../../exports.dart';
 import '../widgets/back_button.dart';
 
@@ -55,8 +57,10 @@ class SignInPageState extends State<SignInPage> {
                 _buildCustomField('Email', emailController),
                 SizedBox(height: 15.h),
                 _buildCustomField('Password', passwordController, obscureText: true),
-                SizedBox(height: 84.h),
-                _buildCustomButton('Login', width: 124.w, callback: () {}),
+                SizedBox(height: 64.h),
+                _buildCustomButton('Login', width: 124.w, callback: () {
+                  context.replaceWithSlideBottomToTop(const HomeScreen());
+                }),
               ],
             ),
           ),
@@ -67,8 +71,13 @@ class SignInPageState extends State<SignInPage> {
 
   Widget _buildAppLogo() {
     return Padding(
-      padding: EdgeInsets.only(left: 26.0.w),
-      child: const AppLogo(),
+      padding: EdgeInsets.only(left: 12.0.w),
+      child: AppLogo(
+        width: 200.w,
+        height: 124.h,
+        titleFontSize: 44.sp,
+        subTitleFontSize: 20.sp,
+      ),
     );
   }
 

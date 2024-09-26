@@ -5,8 +5,6 @@ class OnboardingPage extends StatelessWidget {
 
   static route() => MaterialPageRoute(builder: (context) => const OnboardingPage());
 
-  // static final TextStyle _upperTitleTextStyle =
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,40 +37,41 @@ class OnboardingPage extends StatelessWidget {
   }
 
   Widget _buildTextWithStroke() {
+    return _buildTextWithOutline(
+      'Lets Explore The Pakistan With Us'.toUpperCase(),
+      GoogleFonts.lobster(
+        textStyle: TextStyle(
+          letterSpacing: 2.4,
+          fontSize: 32.sp,
+          color: Colors.amber,
+        ),
+      ),
+      strokeColor: Colors.black,
+      strokeWidth: 4.5,
+    );
+  }
+
+  Widget _buildTextWithOutline(String text, TextStyle style, {required Color strokeColor, required double strokeWidth}) {
     return Stack(
       children: <Widget>[
         Text(
-          'Lets Explore The Pakistan With Us'.toUpperCase(),
+          text,
           textAlign: TextAlign.center,
-          style: GoogleFonts.lobster(
-            textStyle: TextStyle(
-              letterSpacing: 2.4,
-              fontSize: 32.sp,
-              foreground: Paint()
-                ..style = PaintingStyle.stroke
-                ..strokeWidth = 4.5
-                ..color = Colors.black,
-              shadows: const [
-                Shadow(
-                  offset: Offset(0, 4),
-                  blurRadius: 4,
-                  color: Color(0x40000000),
-                ),
-              ],
-            ),
+          style: style.copyWith(
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = strokeWidth
+              ..color = strokeColor,
+            shadows: const [
+              Shadow(
+                offset: Offset(0, 4),
+                blurRadius: 4,
+                color: Color(0x40000000),
+              ),
+            ],
           ),
         ),
-        Text(
-          'Lets Explore The Pakistan With Us'.toUpperCase(),
-          textAlign: TextAlign.center,
-          style: GoogleFonts.lobster(
-            textStyle: TextStyle(
-              letterSpacing: 2.4,
-              fontSize: 32.sp,
-              color: Colors.amber,
-            ),
-          ),
-        ),
+        Text(text, textAlign: TextAlign.center, style: style),
       ],
     );
   }
@@ -130,79 +129,18 @@ class OnboardingPage extends StatelessWidget {
   Widget _buildTextAlreadyHaveAccount(BuildContext context) {
     return GestureDetector(
       onTap: () => context.navigateWithSlideRightToLeft(const SignInPage()),
-      child: Stack(
-        children: <Widget>[
-          RichText(
-            text: TextSpan(
-              text: 'Already have account? ',
-              style: GoogleFonts.calistoga(
-                textStyle: TextStyle(
-                  letterSpacing: 2.4,
-                  fontSize: 16.sp,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 2.5
-                    ..color = Colors.black,
-                  shadows: const [
-                    Shadow(
-                      offset: Offset(0, 4),
-                      blurRadius: 4,
-                      color: Color(0x40000000),
-                    ),
-                  ],
-                ),
-              ),
-              children: [
-                TextSpan(
-                  text: 'Login',
-                  style: GoogleFonts.calistoga(
-                    textStyle: TextStyle(
-                      letterSpacing: 2.4,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 2.5
-                        ..color = Colors.black,
-                      shadows: const [
-                        Shadow(
-                          offset: Offset(0, 4),
-                          blurRadius: 4,
-                          color: Color(0x40000000),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+      child: _buildTextWithOutline(
+        'Already have account? Login',
+        GoogleFonts.calistoga(
+          textStyle: TextStyle(
+            letterSpacing: 2.4,
+            fontSize: 16.sp,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
-          RichText(
-            text: TextSpan(
-              text: 'Already have account? ',
-              style: GoogleFonts.calistoga(
-                textStyle: TextStyle(
-                  letterSpacing: 2.4,
-                  fontSize: 16.sp,
-                  color: Colors.white,
-                ),
-              ),
-              children: [
-                TextSpan(
-                  text: 'Login',
-                  style: GoogleFonts.calistoga(
-                    textStyle: TextStyle(
-                      letterSpacing: 2.4,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.sp,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
+        strokeColor: Colors.black,
+        strokeWidth: 2.5,
       ),
     );
   }

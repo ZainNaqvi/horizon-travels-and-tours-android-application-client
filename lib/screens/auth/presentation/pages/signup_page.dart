@@ -53,17 +53,21 @@ class SignUpPageState extends State<SignUpPage> {
                   () => context.replaceWithFade(const OnboardingPage()),
                 ),
                 _buildAppLogo(),
-                SizedBox(height: 44.h),
+                SizedBox(height: 24.h),
                 _buildCustomField('User Name', nameController),
-                const SizedBox(height: 15),
+                SizedBox(height: 12.h),
                 _buildCustomField('User Email', emailController),
-                const SizedBox(height: 15),
+                SizedBox(height: 12.h),
                 _buildCustomField('Set Password', passwordController, obscureText: true),
-                const SizedBox(height: 34),
-                _buildCustomButton('Sign up', width: 124.w, callback: () {}),
+                SizedBox(height: 30.h),
+                _buildCustomButton('Sign up', width: 124.w, callback: () {
+                  context.replaceWithSlideBottomToTop(const HomeScreen());
+                }),
                 SizedBox(height: 12.h),
-                _buildCustomButton('Login with Google', width: 244.w, callback: () {}),
-                SizedBox(height: 12.h),
+                _buildCustomButton('Login with Google', width: 244.w, callback: () {
+                  context.replaceWithSlideBottomToTop(const HomeScreen());
+                }),
+                SizedBox(height: 8.h),
               ],
             ),
           ),
@@ -74,8 +78,13 @@ class SignUpPageState extends State<SignUpPage> {
 
   Widget _buildAppLogo() {
     return Padding(
-      padding: EdgeInsets.only(left: 26.0.w),
-      child: const AppLogo(),
+      padding: EdgeInsets.only(left: 12.0.w),
+      child: AppLogo(
+        width: 180.w,
+        height: 90.h,
+        titleFontSize: 44.sp,
+        subTitleFontSize: 20.sp,
+      ),
     );
   }
 
