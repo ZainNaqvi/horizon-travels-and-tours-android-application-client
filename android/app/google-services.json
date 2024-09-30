@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "459027944401",
+    "project_id": "horizon-travels-and-tours",
+    "storage_bucket": "horizon-travels-and-tours.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459027944401:android:6be9b126e758ad038246f0",
+        "android_client_info": {
+          "package_name": "com.example.horizon_travel_and_tours_android_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnLZPuQFw6pjqIFPMqmbiuElhDF-Q_tlY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

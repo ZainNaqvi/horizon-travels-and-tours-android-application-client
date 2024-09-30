@@ -1,4 +1,4 @@
-import 'package:horizon_travel_and_tours_android_application/screens/find_tour/presentation/pages/tour_list_page.dart';
+import 'package:horizon_travel_and_tours_android_application/screens/find_tour/pages/tour_list_page.dart';
 
 import '../../../../exports.dart';
 
@@ -42,8 +42,6 @@ class HomeScreen extends StatelessWidget {
       child: AppLogo(
         width: 200.w,
         height: 124.h,
-        titleFontSize: 44.sp,
-        subTitleFontSize: 20.sp,
       ),
     );
   }

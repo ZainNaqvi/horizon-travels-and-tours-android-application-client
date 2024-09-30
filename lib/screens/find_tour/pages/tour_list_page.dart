@@ -1,6 +1,6 @@
-import 'package:horizon_travel_and_tours_android_application/screens/auth/presentation/widgets/back_button.dart';
+import 'package:horizon_travel_and_tours_android_application/screens/auth/widgets/back_button.dart';
 
-import '../../../../exports.dart';
+import '../../../exports.dart';
 
 class FindTourPage extends StatelessWidget {
   FindTourPage({super.key});

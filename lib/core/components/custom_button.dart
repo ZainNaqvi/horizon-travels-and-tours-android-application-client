@@ -1,9 +1,10 @@
-import '../../../exports.dart';
+import '../../exports.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback callback;
   final double width;
+  final bool isloading;
   final Color color;
   final FontWeight fontWeight;
   final Color bgColor;
@@ -14,9 +15,10 @@ class CustomButton extends StatelessWidget {
     required this.callback,
     this.color = Colors.black,
     this.bgColor = Colors.white,
+    this.isloading = false,
     this.radius = 12,
-    this.fontWeight = FontWeight.w400,
-    required this.width,
+    this.fontWeight = FontWeight.w500,
+    this.width = 360,
   });
 
   @override
@@ -26,22 +28,26 @@ class CustomButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         onTap: callback,
         child: Ink(
-          width: width,
-          padding: EdgeInsets.all(10.r),
+          width: width.w,
+          height: 50.h,
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(radius.r),
           ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.calistoga(
-              textStyle: TextStyle(
-                fontWeight: fontWeight,
-                color: color,
-                fontSize: 22.sp,
-              ),
-            ),
+          child: Center(
+            child: isloading
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: fontWeight,
+                      color: color,
+                      fontSize: 18.sp,
+                    ),
+                  ),
           ),
         ),
       ),

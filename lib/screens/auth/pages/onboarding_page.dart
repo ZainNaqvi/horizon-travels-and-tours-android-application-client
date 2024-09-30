@@ -1,4 +1,4 @@
-import '../../../../exports.dart';
+import '../../../exports.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -9,29 +9,43 @@ class OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      body: Container(
-        padding: EdgeInsets.only(top: 100.h, bottom: 24.h),
-        alignment: Alignment.topCenter,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppAsset.bg),
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(AppAsset.onboardingbg),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _buildTextWithStroke(),
-            SizedBox(height: 10.h),
-            _buildAppLogo(),
-            SizedBox(height: 84.h),
-            const SizedBox(height: 15),
-            _buildCustomButton('Let\'s Get Started', width: 124.w, callback: () => context.navigateWithSlideRightToLeft(const SignUpPage())),
-            const SizedBox(height: 44),
-            _buildTextAlreadyHaveAccount(context),
-          ],
-        ),
+          Container(
+            padding: EdgeInsets.only(top: 84.h, bottom: 24.h),
+            alignment: Alignment.topCenter,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _buildTextWithStroke(),
+                SizedBox(height: 300.h),
+                const SizedBox(height: 15),
+                _buildCustomButton(
+                  'Let\'s Get Started',
+                  width: 124.w,
+                  callback: () => context.navigateWithSlideRightToLeft(const SignUpPage()),
+                ),
+                const SizedBox(height: 44),
+                _buildTextAlreadyHaveAccount(context),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 200.h,
+            left: 0,
+            right: 0,
+            child: _buildAppLogo(),
+          )
+        ],
       ),
     );
   }
@@ -77,15 +91,7 @@ class OnboardingPage extends StatelessWidget {
   }
 
   Widget _buildAppLogo() {
-    return Padding(
-      padding: EdgeInsets.only(left: 0.w),
-      child: AppLogo(
-        width: 244.w,
-        height: 124.h,
-        titleFontSize: 38.sp,
-        subTitleFontSize: 22.sp,
-      ),
-    );
+    return AppLogo();
   }
 
   Widget _buildCustomButton(String text, {required double width, required VoidCallback callback}) {

@@ -1,4 +1,4 @@
 class AppAsset {
-  static const String icon = 'assets/images/icon.png';
-  static const String bg = 'assets/images/bg.png';
+  static const String icon = 'assets/images/logo.png';
+  static const String onboardingbg = 'assets/images/onboarding_bg.png';
 }

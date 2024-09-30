@@ -26,3 +26,20 @@ extension NavigatorExtensions on BuildContext {
     Navigator.pushReplacement(this, NavigatorUtil.createRoute(page, TransitionType.slideBottomToTop));
   }
 }
+
+bool isEmailValid(String email) {
+  final RegExp emailRegex = RegExp(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+  );
+  return emailRegex.hasMatch(email);
+}
+
+SystemUiOverlayStyle systemOverlaySetting() {
+  return SystemUiOverlayStyle(
+    statusBarColor: Colors.blue.withOpacity(0.2),
+    statusBarIconBrightness: Brightness.light,
+    statusBarBrightness: Brightness.light,
+    systemNavigationBarColor: Colors.blue.withOpacity(0.2),
+    systemNavigationBarDividerColor: Colors.transparent,
+  );
+}

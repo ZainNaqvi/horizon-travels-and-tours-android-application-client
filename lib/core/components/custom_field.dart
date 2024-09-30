@@ -1,4 +1,6 @@
-import '../../../exports.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomField extends StatelessWidget {
   final TextEditingController? controller;
@@ -12,14 +14,13 @@ class CustomField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final double borderRadius;
   final EdgeInsetsGeometry padding;
-  final List<BoxShadow>? boxShadow;
-  final TextStyle? textStyle;
-  final TextStyle? hintStyle;
   final Color cursorColor;
   final int maxLines;
   final double fontSize;
   final double? width;
   final bool obscureText;
+  final String? Function(String?)? validator; // Added for validation
+
   const CustomField({
     super.key,
     this.controller,
@@ -29,18 +30,16 @@ class CustomField extends StatelessWidget {
     this.inputFormatters,
     this.borderRadius = 2,
     this.padding = const EdgeInsets.symmetric(horizontal: 14),
-    this.boxShadow,
-    this.textStyle,
-    this.hintStyle,
     this.cursorColor = Colors.blue,
     this.fontSize = 20,
     this.maxLines = 1,
     this.width,
     this.obscureText = false,
     required this.title,
-    this.titleColor = Colors.white,
-    this.titleFontSize = 18,
-    this.fontWeight = FontWeight.w500,
+    this.titleColor = Colors.black,
+    this.titleFontSize = 20,
+    this.fontWeight = FontWeight.w400,
+    this.validator,
   });
 
   @override
@@ -50,55 +49,49 @@ class CustomField extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.caladea(
-            textStyle: TextStyle(
-              color: titleColor,
-              fontSize: titleFontSize,
-              fontWeight: fontWeight,
-              letterSpacing: 2,
-            ),
+          style: TextStyle(
+            color: titleColor,
+            fontSize: titleFontSize,
+            fontWeight: fontWeight,
           ),
         ),
-        Container(
-          width: width ?? 0.75.sw,
-          padding: padding,
-          margin: EdgeInsets.only(top: 4.h),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
-            color: AppColor.white,
-            boxShadow: boxShadow ??
-                [
-                  BoxShadow(
-                    color: AppColor.grey.withOpacity(0.2),
-                    blurRadius: 2,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-          ),
-          child: TextField(
+        SizedBox(height: 12.h),
+        SizedBox(
+          width: 360.w,
+          child: TextFormField(
+            cursorColor: cursorColor,
             controller: controller,
             textInputAction: textInputAction,
             keyboardType: keyboardType,
             obscureText: obscureText,
             maxLines: maxLines,
             inputFormatters: inputFormatters,
-            style: textStyle ??
-                TextStyle(
-                  color: Colors.black,
-                  fontSize: fontSize,
-                ),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: fontSize,
+            ),
             decoration: InputDecoration(
-              border: InputBorder.none,
+              fillColor: Colors.blue.withOpacity(0.2),
+              filled: true,
+              enabledBorder: _outlineBorder(),
+              focusedBorder: _outlineBorder(),
+              border: _outlineBorder(),
               hintText: hintText,
-              hintStyle: hintStyle ??
-                  TextStyle(
-                    color: AppColor.appGrey,
-                    fontSize: fontSize,
-                  ),
+              hintStyle: TextStyle(
+                color: Colors.black.withOpacity(0.5),
+                fontSize: fontSize,
+              ),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  OutlineInputBorder _outlineBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: Colors.transparent),
     );
   }
 }
