@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:horizon_travel_and_tours_android_application/exports.dart';
 
 class FindTourPage extends StatefulWidget {
@@ -14,12 +16,6 @@ class FindTourPage extends StatefulWidget {
 class _FindTourPageState extends State<FindTourPage> {
   int _selectedIndex = 0;
   int? _selectedPlan;
-  static const List<Widget> _pages = <Widget>[
-    HomeScreen(),
-    SizedBox(),
-    SizedBox(),
-    SizedBox(),
-  ];
 
   final List<String> tourLocations = [
     'Naran',
@@ -32,6 +28,7 @@ class _FindTourPageState extends State<FindTourPage> {
   @override
   void initState() {
     super.initState();
+
     SystemChrome.setSystemUIOverlayStyle(systemOverlaySetting());
   }
 
@@ -46,18 +43,22 @@ class _FindTourPageState extends State<FindTourPage> {
             SizedBox(height: 8.h),
             _buildPlanTripButton(),
             SizedBox(height: 24.h),
-            _buildTourGrid(),
+            _selectedIndex == 0 ? _buildTourGrid() : gridTwo(context),
           ],
         ),
       ),
-      floatingActionButton: _selectedPlan == null
+      floatingActionButton: _selectedPlan == null || _selectedIndex == 1
           ? null
           : SizedBox(
               width: 144.w,
               height: 44.h,
               child: FloatingActionButton(
                 backgroundColor: Colors.green,
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                },
                 child: Text(
                   'Next',
                   style: TextStyle(
@@ -70,20 +71,52 @@ class _FindTourPageState extends State<FindTourPage> {
     );
   }
 
-  CurvedNavigationBar _buildCurvedNavigationBar() {
-    return CurvedNavigationBar(
-      backgroundColor: Colors.blueAccent,
-      items: <Widget>[
-        Icon(Icons.home, size: 30.sp),
-        Icon(Icons.explore, size: 30.sp),
-        Icon(Icons.bookmark, size: 30.sp),
-        Icon(Icons.person, size: 30.sp),
+  Column gridTwo(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 24.h),
+        listTile('1 Day tour'),
+        listTile('3 Day tour'),
+        listTile('5 Day tour'),
+        SizedBox(height: 24.h),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xff4B6792),
+          ),
+          onPressed: () {
+            context.navigateWithSlideBottomToTop(const BookingConfirmationPage());
+          },
+          child: const Text(
+            'Book Now',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
       ],
-      onTap: (index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
+    );
+  }
+
+  Container listTile(String text) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 54.h),
+      padding: EdgeInsets.all(12.r),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      alignment: Alignment.center,
+      width: 360.w,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 18.sp,
+        ),
+      ),
     );
   }
 
@@ -125,7 +158,8 @@ class _FindTourPageState extends State<FindTourPage> {
       onTap: () {
         setState(() {
           _selectedPlan = index;
-          print(index);
+
+          log((index == _selectedPlan).toString());
         });
       },
       child: Column(
@@ -182,7 +216,13 @@ class _FindTourPageState extends State<FindTourPage> {
         title: 'Find a tour',
         leadingIcon: Icons.arrow_back,
         leadingCallback: () {
-          Navigator.pop(context);
+          if (_selectedIndex != 0) {
+            setState(() {
+              _selectedIndex = 0;
+            });
+          } else {
+            Navigator.pop(context);
+          }
         },
         trailingIcon: Icons.bookmark_outlined,
         trailingCallback: () {},
