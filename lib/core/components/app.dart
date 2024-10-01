@@ -20,7 +20,7 @@ class MainApp extends StatelessWidget {
           home: child,
         );
       },
-      child: const OnboardingPage(),
+      child: const SplashScreen(),
     );
   }
 }

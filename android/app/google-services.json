@@ -12,7 +12,20 @@
           "package_name": "com.example.horizon_travel_and_tours_android_application"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "459027944401-3a9di8svv54qcuelsgcj9ac0fcakdbh4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.horizon_travel_and_tours_android_application",
+            "certificate_hash": "55f340b8a74e9c4894bc230377359b3fdcb2f273"
+          }
+        },
+        {
+          "client_id": "459027944401-ihqk04jfgrs22d55ce3pa0gb93pudgln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBnLZPuQFw6pjqIFPMqmbiuElhDF-Q_tlY"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459027944401-ihqk04jfgrs22d55ce3pa0gb93pudgln.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

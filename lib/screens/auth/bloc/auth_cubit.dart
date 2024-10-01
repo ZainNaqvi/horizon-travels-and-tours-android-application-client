@@ -1,4 +1,4 @@
-import 'package:horizon_travel_and_tours_android_application/core/services/auth_services.dart';
+// ignore_for_file: use_build_context_synchronously
 
 import '../../../exports.dart';
 
@@ -68,6 +68,15 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  void loginWithGoogle(BuildContext context) async {
+    emit(state.copyWith(loadingGoogleAccount: true));
+    String response = await _dbHelper.signInWithGoogle(context);
+    if (response == 'success') {
+      context.navigateWithSlideRightToLeft(const HomeScreen());
+    }
+    emit(state.copyWith(loadingGoogleAccount: false));
+  }
+
   void signOut() {
     emit(const AuthState());
   }
@@ -97,8 +106,8 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
 
-    if (password.length <= 5) {
-      showToast('Password must be at least 6 characters.', context);
+    if (password.length <= 6) {
+      showToast('Password must be at least 7 characters.', context);
       return;
     }
   }

@@ -3,14 +3,14 @@ import '../../../exports.dart';
 Widget buildBackButton(
   VoidCallback callback, {
   Color color = Colors.white,
+  double topMargin = 44,
   Color? iconColor,
   IconData iconData = Icons.arrow_back_ios,
 }) {
   return GestureDetector(
     onTap: () => callback(),
     child: Container(
-      padding: EdgeInsets.only(left: 8.w),
-      margin: EdgeInsets.only(top: 44.h),
+      margin: EdgeInsets.only(top: topMargin.h),
       width: 54.w,
       height: 44.h,
       decoration: BoxDecoration(

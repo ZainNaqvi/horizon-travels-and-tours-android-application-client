@@ -36,7 +36,7 @@ bool isEmailValid(String email) {
 
 SystemUiOverlayStyle systemOverlaySetting() {
   return SystemUiOverlayStyle(
-    statusBarColor: Colors.blue.withOpacity(0.2),
+    statusBarColor: AppColor.backgroundColor,
     statusBarIconBrightness: Brightness.light,
     statusBarBrightness: Brightness.light,
     systemNavigationBarColor: Colors.blue.withOpacity(0.2),

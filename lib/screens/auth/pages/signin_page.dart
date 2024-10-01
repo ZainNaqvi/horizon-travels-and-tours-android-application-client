@@ -54,7 +54,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   SizedBox(height: 12.h),
                   _buildCustomField(
-                    'Set Password',
+                    'User Password',
                     context.read<AuthCubit>().passwordController,
                     obscureText: true,
                     textInputType: TextInputType.text,
@@ -67,6 +67,14 @@ class _SignInPageState extends State<SignInPage> {
                     state.isLoading,
                     callback: () => context.read<AuthCubit>().signin(context),
                     bg: AppColor.backgroundColor,
+                  ),
+                  SizedBox(height: 12.h),
+                  _buildCustomButton(
+                    'Login With Google',
+                    state.loadingGoogleAccount,
+                    callback: () => context.read<AuthCubit>().loginWithGoogle(context),
+                    bg: Colors.pink.shade50,
+                    textColor: Colors.pinkAccent,
                   ),
                 ],
               ),

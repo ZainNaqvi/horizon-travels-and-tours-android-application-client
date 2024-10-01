@@ -1,27 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:horizon_travel_and_tours_android_application/exports.dart';
+import 'dart:developer';
+
+import '../../exports.dart';
 
 class DbHelper {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
 // for the provider
   Future<UserCredentials> getUserDetails() async {
-    // getting the current user by firebase auth
     User currentUser = _auth.currentUser!;
 
-    //getting the data
-
     DocumentSnapshot snapshot = await _firebaseFirestore.collection("user").doc(currentUser.uid).get().catchError(
+          // ignore: body_might_complete_normally_catch_error
           (onError) {},
         );
 
     return UserCredentials.fromSnap(snapshot);
   }
-  // Creating the function which is responsible for the auth related work
 
-  // creating - the -  function - to - create - the - user
   Future<String> createUser(
     BuildContext context, {
     required String name,
@@ -36,11 +35,9 @@ class DbHelper {
         email: email,
         password: password,
       );
-      // Getting - Response - Firebase - Auth
       UserCredentials userData = UserCredentials(role: role, email: email, uid: userCredential.user!.uid, name: name, imageUrl: imageUrl);
       // Sending - Email -  Verification
       await sendVerification(context);
-      // Creating - Firebase - Firestore - Collection (' user ') & Setting - Values
       await _firebaseFirestore.collection("user").doc(userCredential.user!.uid).set(
             userData.toJson(),
           );
@@ -57,7 +54,6 @@ class DbHelper {
     return res;
   }
 
-// Email Verification
   Future<String> sendVerification(BuildContext context) async {
     String res = "Some error occured";
     try {
@@ -75,21 +71,17 @@ class DbHelper {
     return res;
   }
 
-  // login
   Future<String> userLogin(
     BuildContext context, {
     required String email,
     required String password,
   }) async {
     String res = "Some error occured.";
-    // checking the values are empty or not
     try {
-      // now checking and login the user
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       if (!_auth.currentUser!.emailVerified) {
         await _auth.currentUser!.sendEmailVerification();
-        // const url = "https://mail.google.com/";
-        // html.window.open(url, "Gmail.com");
+
         showToast("Please verify the email first.", context);
       } else {
         res = "success";
@@ -110,7 +102,6 @@ class DbHelper {
     return res;
   }
 
-  // Forgot password
   Future<String> forgotPassword(BuildContext context, {required String email}) async {
     String res = "An error occurred";
     try {
@@ -123,7 +114,39 @@ class DbHelper {
     return res;
   }
 
-  // signout
+  Future<String> signInWithGoogle(BuildContext context) async {
+    String res = "An error occurred";
+
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Sign in to Firebase with the Google credential
+      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      UserCredentials userData = UserCredentials(
+        role: 'user',
+        email: userCredential.user?.email,
+        uid: userCredential.user!.uid,
+        name: userCredential.user!.displayName,
+        imageUrl: userCredential.user!.photoURL ?? '',
+      );
+
+      // Create a new document for the user in Firestore
+      await _firebaseFirestore.collection('users').doc(userCredential.user?.uid).set(userData.toJson());
+
+      showToast("User signed in: ${userCredential.user?.email}", context);
+      return 'success';
+    } catch (error) {
+      log("Error signing in: $error");
+    }
+    return res;
+  }
+
   Future<String> signOut() async {
     String res = "Some error Occured";
     try {

@@ -1,5 +1,3 @@
-import 'package:horizon_travel_and_tours_android_application/screens/find_tour/pages/tour_list_page.dart';
-
 import '../../../../exports.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -21,7 +19,6 @@ class HomeScreen extends StatelessWidget {
             children: [
               SizedBox(height: 24.h),
               _buildAppLogo(),
-              SizedBox(height: 94.h),
               _buildCustomButton('Find a tour', callback: () {
                 context.navigateWithSlideRightToLeft(FindTourPage());
               }),
@@ -37,19 +34,12 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildAppLogo() {
-    return Padding(
-      padding: EdgeInsets.only(left: 12.w),
-      child: AppLogo(
-        width: 200.w,
-        height: 124.h,
-      ),
-    );
+    return Image.asset(AppAsset.icon);
   }
 
   Widget _buildCustomButton(String text, {required VoidCallback callback}) {
     return CustomButton(
-      width: 300.w,
-      fontWeight: FontWeight.w200,
+      fontWeight: FontWeight.w500,
       color: AppColor.textColor,
       text: text,
       callback: callback,

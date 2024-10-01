@@ -7,6 +7,9 @@ export 'package:google_fonts/google_fonts.dart';
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:firebase_auth/firebase_auth.dart';
+export 'package:google_sign_in/google_sign_in.dart';
+export 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
 // Core
 export 'package:horizon_travel_and_tours_android_application/core/theme/colors.dart';
 export 'package:horizon_travel_and_tours_android_application/core/components/custom_field.dart';
@@ -21,8 +24,10 @@ export 'package:horizon_travel_and_tours_android_application/core/components/cus
 export 'package:horizon_travel_and_tours_android_application/screens/auth/pages/signup_page.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/auth/pages/signin_page.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/auth/pages/onboarding_page.dart';
-export 'package:horizon_travel_and_tours_android_application/screens/home/presentation/home_screen.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/home/page/home_screen.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/auth/pages/forgot_password.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/find_tour/pages/tour_list_page.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/splash/splash_screen.dart';
 
 // Utils
 export 'package:horizon_travel_and_tours_android_application/core/utils/navigator_util.dart';
@@ -37,3 +42,11 @@ export 'package:horizon_travel_and_tours_android_application/screens/auth/bloc/a
 
 // Models
 export 'package:horizon_travel_and_tours_android_application/core/models/user.dart';
+
+// Services
+export 'package:horizon_travel_and_tours_android_application/core/services/auth_services.dart';
+
+// Widgets
+export 'package:horizon_travel_and_tours_android_application/core/components/custom_app_bar.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/find_tour/widgets/details_modal_sheet.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/auth/widgets/back_button.dart';
