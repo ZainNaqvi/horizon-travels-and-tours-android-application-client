@@ -1,11 +1,10 @@
-import 'dart:developer';
+import 'package:horizon_travel_and_tours_android_application/core/models/place.dart';
 
-import 'package:horizon_travel_and_tours_android_application/exports.dart';
+import '../../../exports.dart';
 
 class FindTourPage extends StatefulWidget {
   const FindTourPage({super.key});
 
-  // Constants
   static const double buttonWidth = 200;
   static const double gridHeight = 440;
 
@@ -17,19 +16,18 @@ class _FindTourPageState extends State<FindTourPage> {
   int _selectedIndex = 0;
   int? _selectedPlan;
 
-  final List<String> tourLocations = [
-    'Naran',
-    'Murree',
-    'Sawat',
-    'Hunza',
-    'Fairy Meadows',
-    'Gawadar',
-  ];
   @override
   void initState() {
     super.initState();
-
     SystemChrome.setSystemUIOverlayStyle(systemOverlaySetting());
+  }
+
+  Stream<List<Place>> _fetchPlaces() {
+    return FirebaseFirestore.instance.collection('places').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Place.fromJson(doc.data());
+      }).toList();
+    });
   }
 
   @override
@@ -43,7 +41,7 @@ class _FindTourPageState extends State<FindTourPage> {
             SizedBox(height: 8.h),
             _buildPlanTripButton(),
             SizedBox(height: 24.h),
-            _selectedIndex == 0 ? _buildTourGrid() : gridTwo(context),
+            _selectedIndex == 0 ? _buildTourGrid() : _gridTwo(context),
           ],
         ),
       ),
@@ -71,55 +69,6 @@ class _FindTourPageState extends State<FindTourPage> {
     );
   }
 
-  Column gridTwo(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(height: 24.h),
-        listTile('1 Day tour'),
-        listTile('3 Day tour'),
-        listTile('5 Day tour'),
-        SizedBox(height: 24.h),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xff4B6792),
-          ),
-          onPressed: () {
-            context.navigateWithSlideBottomToTop(const BookingConfirmationPage());
-          },
-          child: const Text(
-            'Book Now',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Container listTile(String text) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 54.h),
-      padding: EdgeInsets.all(12.r),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      alignment: Alignment.center,
-      width: 360.w,
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 18.sp,
-        ),
-      ),
-    );
-  }
-
   Widget _buildPlanTripButton() {
     return Text(
       'Plan Your Trip',
@@ -137,29 +86,45 @@ class _FindTourPageState extends State<FindTourPage> {
   Widget _buildTourGrid() {
     return SizedBox(
       height: FindTourPage.gridHeight.h,
-      child: GridView.builder(
-        itemCount: tourLocations.length,
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 6.r,
-          mainAxisSpacing: 6.r,
-          childAspectRatio: 1.1,
-        ),
-        itemBuilder: (context, index) {
-          return _buildTourCard(tourLocations[index], index);
+      child: StreamBuilder<List<Place>>(
+        stream: _fetchPlaces(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No places found.'));
+          }
+
+          final places = snapshot.data!;
+          return GridView.builder(
+            itemCount: places.length,
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 6.r,
+              mainAxisSpacing: 6.r,
+              childAspectRatio: 1.1,
+            ),
+            itemBuilder: (context, index) {
+              return _buildTourCard(places[index], index);
+            },
+          );
         },
       ),
     );
   }
 
-  Widget _buildTourCard(String location, int index) {
+  Widget _buildTourCard(Place place, int index) {
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedPlan = index;
-
-          log((index == _selectedPlan).toString());
         });
       },
       child: Column(
@@ -174,7 +139,7 @@ class _FindTourPageState extends State<FindTourPage> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(32.r),
               image: const DecorationImage(
-                image: AssetImage('assets/images/tour_02.png'),
+                image: AssetImage('assets/images/tour_02.png'), // Update the image path
                 fit: BoxFit.fitHeight,
               ),
             ),
@@ -194,7 +159,7 @@ class _FindTourPageState extends State<FindTourPage> {
                 : const SizedBox(),
           ),
           Text(
-            location,
+            place.title,
             textAlign: TextAlign.center,
             style: GoogleFonts.calistoga(
               textStyle: TextStyle(
@@ -205,6 +170,55 @@ class _FindTourPageState extends State<FindTourPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Column _gridTwo(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 24.h),
+        _listTile('1 Day tour'),
+        _listTile('3 Day tour'),
+        _listTile('5 Day tour'),
+        SizedBox(height: 24.h),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xff4B6792),
+          ),
+          onPressed: () {
+            context.navigateWithSlideBottomToTop(const BookingConfirmationPage());
+          },
+          child: const Text(
+            'Book Now',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container _listTile(String text) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 54.h),
+      padding: EdgeInsets.all(12.r),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      alignment: Alignment.center,
+      width: 360.w,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 18.sp,
+        ),
       ),
     );
   }
