@@ -212,20 +212,23 @@ class _FindTourPageState extends State<FindTourPage> {
   PreferredSize _buildAppBar(BuildContext context) {
     return PreferredSize(
       preferredSize: Size(360.w, 200.h),
-      child: CustomAppBar(
-        title: 'Find a tour',
-        leadingIcon: Icons.arrow_back,
-        leadingCallback: () {
-          if (_selectedIndex != 0) {
-            setState(() {
-              _selectedIndex = 0;
-            });
-          } else {
-            Navigator.pop(context);
-          }
-        },
-        trailingIcon: Icons.bookmark_outlined,
-        trailingCallback: () {},
+      child: Padding(
+        padding: EdgeInsets.only(top: 12.0.h),
+        child: CustomAppBar(
+          title: 'Find a tour',
+          leadingIcon: Icons.arrow_back,
+          leadingCallback: () {
+            if (_selectedIndex != 0) {
+              setState(() {
+                _selectedIndex = 0;
+              });
+            } else {
+              Navigator.pop(context);
+            }
+          },
+          trailingIcon: Icons.bookmark_outlined,
+          trailingCallback: () {},
+        ),
       ),
     );
   }
