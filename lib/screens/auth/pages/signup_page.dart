@@ -71,6 +71,15 @@ class _SignUpPageState extends State<SignUpPage> {
                     callback: () => context.read<AuthCubit>().signup(context),
                     bg: AppColor.backgroundColor,
                   ),
+                  SizedBox(height: 12.h),
+                  _buildCustomButton(
+                    'Signup With Google',
+                    state.loadingGoogleAccount,
+                    callback: () => context.read<AuthCubit>().loginWithGoogle(context),
+                    bg: Colors.pink.shade50,
+                    textColor: Colors.pinkAccent,
+                  ),
+                  SizedBox(height: 32.h),
                 ],
               ),
             );

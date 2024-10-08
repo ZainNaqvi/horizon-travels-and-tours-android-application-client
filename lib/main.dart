@@ -20,6 +20,8 @@ void main() async {
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
+      BlocProvider<FindTourCubit>(create: (context) => FindTourCubit()),
+      BlocProvider<CommonCubit>(create: (context) => CommonCubit(DbHelper())),
     ],
     child: const MainApp(),
   ));

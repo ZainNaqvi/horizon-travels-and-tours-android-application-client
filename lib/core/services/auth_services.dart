@@ -136,14 +136,49 @@ class DbHelper {
         imageUrl: userCredential.user!.photoURL ?? '',
       );
 
-      // Create a new document for the user in Firestore
-      await _firebaseFirestore.collection('users').doc(userCredential.user?.uid).set(userData.toJson());
+      await _firebaseFirestore.collection('user').doc(userCredential.user?.uid).set(userData.toJson());
 
       showToast("User signed in: ${userCredential.user?.email}", context);
       return 'success';
     } catch (error) {
       log("Error signing in: $error");
     }
+    return res;
+  }
+
+  Future<String> createBooking({
+    required String placeId,
+    required String placeName,
+    required String duration,
+  }) async {
+    String res = "Some error occurred";
+    try {
+      // Get current user ID
+      User? currentUser = _auth.currentUser;
+      if (currentUser == null) {
+        return "User not logged in";
+      }
+      String userId = currentUser.uid;
+
+      Booking booking = Booking(
+        userId: userId,
+        placeId: placeId,
+        placeName: placeName,
+        duration: duration,
+        createdAt: DateTime.now(),
+        status: 'Pending',
+      );
+
+      await _firebaseFirestore.collection("booking").add(booking.toJson());
+
+      res = '''Your booking request has been sent to the admin. Our team will review your request and get back to you via your provided contact details (email or phone number). If the admin approves your booking, you will receive a notification.
+
+You can cancel your booking request at any time. Thank you!''';
+    } catch (e) {
+      log("Error creating booking: $e");
+      res = e.toString();
+    }
+
     return res;
   }
 

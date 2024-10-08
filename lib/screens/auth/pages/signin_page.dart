@@ -76,6 +76,7 @@ class _SignInPageState extends State<SignInPage> {
                     bg: Colors.pink.shade50,
                     textColor: Colors.pinkAccent,
                   ),
+                  SizedBox(height: 32.h),
                 ],
               ),
             );
