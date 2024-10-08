@@ -182,6 +182,43 @@ You can cancel your booking request at any time. Thank you!''';
     return res;
   }
 
+  Future<List<Booking>> getUserBookingDetails() async {
+    List<Booking> bookings = [];
+
+    try {
+      User? currentUser = _auth.currentUser;
+      if (currentUser == null) {
+        throw Exception("User not logged in");
+      }
+      String userId = currentUser.uid;
+
+      QuerySnapshot snapshot = await _firebaseFirestore.collection("booking").where("userId", isEqualTo: userId).get();
+
+      for (var doc in snapshot.docs) {
+        bookings.add(Booking.fromJson(doc.data() as Map<String, dynamic>));
+      }
+    } catch (e) {
+      log("Error retrieving user bookings: $e");
+    }
+
+    return bookings;
+  }
+
+  Future<Place?> getPlaceById(String placeId) async {
+    try {
+      DocumentSnapshot snapshot = await _firebaseFirestore.collection("places").doc(placeId).get();
+
+      if (snapshot.exists) {
+        return Place.fromJson(snapshot.data() as Map<String, dynamic>);
+      } else {
+        log("Place with ID $placeId not found.");
+      }
+    } catch (e) {
+      log("Error fetching place: $e");
+    }
+    return null;
+  }
+
   Future<String> signOut() async {
     String res = "Some error Occured";
     try {

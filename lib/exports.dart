@@ -29,6 +29,7 @@ export 'package:horizon_travel_and_tours_android_application/screens/auth/pages/
 export 'package:horizon_travel_and_tours_android_application/screens/find_tour/pages/tour_list_page.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/splash/splash_screen.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/booking/confirmation_page.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/home/page/booked_trip_detail_page.dart';
 
 // Utils
 export 'package:horizon_travel_and_tours_android_application/core/utils/navigator_util.dart';

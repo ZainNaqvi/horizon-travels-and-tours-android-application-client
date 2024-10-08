@@ -20,6 +20,29 @@ class CommonCubit extends Cubit<CommonState> {
     return result;
   }
 
+  Future<void> fetchUserBookings() async {
+    showLoading();
+    try {
+      List<Booking> bookings = await _dbHelper.getUserBookingDetails();
+
+      List<Booking> bookingsWithPlaces = [];
+
+      for (var booking in bookings) {
+        Place? place = await _dbHelper.getPlaceById(booking.placeId);
+        bookingsWithPlaces.add(
+          booking.copyWith(placeDetails: place),
+        );
+      }
+
+      emit(state.copyWith(bookings: bookingsWithPlaces));
+    } catch (e) {
+      debugPrint("Error fetching user bookings: $e");
+      emit(state.copyWith(bookings: []));
+    } finally {
+      hideLoading();
+    }
+  }
+
   void showLoading() {
     emit(state.copyWith(loading: true));
   }

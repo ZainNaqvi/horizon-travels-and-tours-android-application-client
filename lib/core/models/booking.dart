@@ -1,3 +1,5 @@
+import '../../exports.dart';
+
 class Booking {
   final String userId;
   final String placeId;
@@ -5,6 +7,7 @@ class Booking {
   final String duration;
   final DateTime createdAt;
   final String status;
+  final Place? placeDetails;
 
   Booking({
     required this.userId,
@@ -13,6 +16,7 @@ class Booking {
     required this.duration,
     required this.createdAt,
     required this.status,
+    this.placeDetails,
   });
 
   Map<String, dynamic> toJson() {
@@ -34,6 +38,28 @@ class Booking {
       duration: json['duration'],
       createdAt: DateTime.parse(json['createdAt']),
       status: json['status'],
+      placeDetails: json['placeDetails'] != null ? Place.fromJson(json['placeDetails']) : null,
+    );
+  }
+
+  // CopyWith method
+  Booking copyWith({
+    String? userId,
+    String? placeId,
+    String? placeName,
+    String? duration,
+    DateTime? createdAt,
+    String? status,
+    Place? placeDetails,
+  }) {
+    return Booking(
+      userId: userId ?? this.userId,
+      placeId: placeId ?? this.placeId,
+      placeName: placeName ?? this.placeName,
+      duration: duration ?? this.duration,
+      createdAt: createdAt ?? this.createdAt,
+      status: status ?? this.status,
+      placeDetails: placeDetails ?? this.placeDetails,
     );
   }
 }
