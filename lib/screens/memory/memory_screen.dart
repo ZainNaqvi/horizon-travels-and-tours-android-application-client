@@ -11,6 +11,7 @@ class MemoryScreen extends StatefulWidget {
 class _MemoryScreenState extends State<MemoryScreen> {
   final ImagePicker _picker = ImagePicker();
   List<String> _imagePaths = [];
+  String referenceId = '';
   int _currentIndex = 0;
   bool isUploadingMemory = false;
   bool isUploadedDone = false;
@@ -115,7 +116,11 @@ class _MemoryScreenState extends State<MemoryScreen> {
               SizedBox(height: _imagePaths.isNotEmpty ? 8.h : 64.h),
               _imagePaths.isNotEmpty
                   ? listTile(isUploadedDone ? 'Next' : 'Upload Memory', () async {
-                      isUploadedDone ? context.navigateWithSlideRightToLeft(const SendMemoryPage()) : await uploadMemory(_imagePaths);
+                      isUploadedDone
+                          ? context.navigateWithSlideRightToLeft(SendMemoryPage(
+                              memeoryAddress: referenceId,
+                            ))
+                          : referenceId = await uploadMemory(_imagePaths);
                       // ignore: use_build_context_synchronously
                     }, color: Colors.green, isloading: isUploadingMemory)
                   : Column(
@@ -132,13 +137,17 @@ class _MemoryScreenState extends State<MemoryScreen> {
     );
   }
 
-  Future<void> uploadMemory(List<String> _imagePaths) async {
+  Future<String> uploadMemory(List<String> _imagePaths) async {
     setState(() {
       isUploadingMemory = true;
     });
+
     final currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser == null) {
+      setState(() {
+        isUploadingMemory = false;
+      });
       throw Exception('No user is logged in.');
     }
 
@@ -162,6 +171,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
         'uid': currentUserId,
         'imageLinks': imageLinks,
         'restricted': true,
+        'allowed_user': [],
         'timestamp': FieldValue.serverTimestamp(),
         'viewStart': DateTime.now().toIso8601String(),
         'viewEnd': DateTime.now().add(const Duration(days: 7)).toIso8601String(),
@@ -169,26 +179,33 @@ class _MemoryScreenState extends State<MemoryScreen> {
         'canGetVideoRecording': false,
       };
 
-      await FirebaseFirestore.instance.collection('users').doc(currentUserId).collection('memories').add(memoryData);
-      setState(() {
-        isUploadedDone = true;
-      });
+      DocumentReference documentReference = await FirebaseFirestore.instance.collection('memories').add(memoryData);
+
+      await documentReference.update({'docId': documentReference.id});
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Memory uploaded successfully!'),
           duration: Duration(seconds: 2),
         ),
       );
-
       print("Memory uploaded successfully!");
+
+      return documentReference.id;
     } catch (e) {
       print('Error uploading memory: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to upload memory: $e'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
       throw Exception('Failed to upload memory.');
+    } finally {
+      setState(() {
+        isUploadingMemory = false;
+      });
     }
-
-    setState(() {
-      isUploadingMemory = false;
-    });
   }
 
   Widget listTile(String text, VoidCallback callback, {Color color = AppColor.backgroundColor, bool isloading = false}) {

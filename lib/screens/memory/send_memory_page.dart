@@ -1,7 +1,8 @@
 import '../../exports.dart';
 
 class SendMemoryPage extends StatefulWidget {
-  const SendMemoryPage({super.key});
+  final String memeoryAddress;
+  const SendMemoryPage({super.key, required this.memeoryAddress});
 
   @override
   State<SendMemoryPage> createState() => _SendMemoryPageState();
@@ -60,6 +61,7 @@ class _SendMemoryPageState extends State<SendMemoryPage> {
               final user = users[index].data() as Map<String, dynamic>;
               return UserTile(
                 userId: user['uid'],
+                memeoryAddress: widget.memeoryAddress,
                 userName: user['name'],
                 userEmail: user['email'],
                 userImage: user['imageUrl'],
@@ -80,11 +82,13 @@ class UserTile extends StatefulWidget {
   final String userName;
   final String userEmail;
   final String userImage;
+  final String memeoryAddress;
   final VoidCallback onActionChanged;
   const UserTile({
     required this.userId,
     required this.userName,
     required this.userEmail,
+    required this.memeoryAddress,
     required this.userImage,
     required this.onActionChanged,
     super.key,
@@ -145,7 +149,11 @@ class _UserTileState extends State<UserTile> {
                             isLoading = true;
                           });
                           if (isFriend) {
-                            sendMemory(widget.userId);
+                            sendMemory(
+                              widget.memeoryAddress,
+                              widget.userId,
+                              context,
+                            );
                             setState(() {
                               actionCompleted = true;
                             });
@@ -181,7 +189,7 @@ class _UserTileState extends State<UserTile> {
   Future<bool> checkIfFriend(String userId) async {
     final currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
-    final docRef = FirebaseFirestore.instance.collection('users').doc(currentUserId);
+    final docRef = FirebaseFirestore.instance.collection('user').doc(currentUserId);
     final doc = await docRef.get();
 
     if (doc.exists) {
@@ -199,8 +207,34 @@ class _UserTileState extends State<UserTile> {
     return false;
   }
 
-  void sendMemory(String userId) {
-    print('Sending memory to user: $userId');
+  Future<void> sendMemory(String docID, String userId, BuildContext context) async {
+    print('Sending memory to user: $docID');
+
+    final memoryDocRef = FirebaseFirestore.instance.collection('memories').doc(docID);
+
+    try {
+      await memoryDocRef.update({
+        'allowed_users': FieldValue.arrayUnion([userId]),
+      });
+
+      print('User $userId has been added to allowed_users for memory $docID.');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('User $userId has been added to allowed users!'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      print('Error adding user to allowed_users: $e');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error adding user to allowed users.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   Future<void> sendInvite(String userId) async {
