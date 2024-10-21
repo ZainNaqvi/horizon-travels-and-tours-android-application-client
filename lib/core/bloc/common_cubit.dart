@@ -43,6 +43,10 @@ class CommonCubit extends Cubit<CommonState> {
     }
   }
 
+  void isActionCompleted(bool isActionCompleted) {
+    emit(state.copyWith(actionCompleted: isActionCompleted));
+  }
+
   void showLoading() {
     emit(state.copyWith(loading: true));
   }

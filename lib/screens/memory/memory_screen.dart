@@ -1,7 +1,4 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // Ensure you have this if using ScreenUtil
 import '../../exports.dart';
 
 class MemoryScreen extends StatefulWidget {
@@ -15,7 +12,8 @@ class _MemoryScreenState extends State<MemoryScreen> {
   final ImagePicker _picker = ImagePicker();
   List<String> _imagePaths = [];
   int _currentIndex = 0;
-
+  bool isUploadingMemory = false;
+  bool isUploadedDone = false;
   Future<void> _captureImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
@@ -116,7 +114,10 @@ class _MemoryScreenState extends State<MemoryScreen> {
                 ),
               SizedBox(height: _imagePaths.isNotEmpty ? 8.h : 64.h),
               _imagePaths.isNotEmpty
-                  ? listTile('Next', () {}, color: Colors.green)
+                  ? listTile(isUploadedDone ? 'Next' : 'Upload Memory', () async {
+                      isUploadedDone ? context.navigateWithSlideRightToLeft(const SendMemoryPage()) : await uploadMemory(_imagePaths);
+                      // ignore: use_build_context_synchronously
+                    }, color: Colors.green, isloading: isUploadingMemory)
                   : Column(
                       children: [
                         listTile('Capture from Camera', () => _captureImage()),
@@ -131,24 +132,91 @@ class _MemoryScreenState extends State<MemoryScreen> {
     );
   }
 
-  Widget listTile(String text, VoidCallback callback, {Color color = AppColor.backgroundColor}) {
-    return GestureDetector(
-      onTap: () {
-        callback();
-      },
-      child: Container(
-        alignment: Alignment.center,
-        width: 360.w,
-        padding: EdgeInsets.all(18.r),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(8.r),
+  Future<void> uploadMemory(List<String> _imagePaths) async {
+    setState(() {
+      isUploadingMemory = true;
+    });
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      throw Exception('No user is logged in.');
+    }
+
+    final currentUserId = currentUser.uid;
+
+    try {
+      List<String> imageLinks = [];
+
+      for (String path in _imagePaths) {
+        File file = File(path);
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        Reference ref = FirebaseStorage.instance.ref().child('memories/$currentUserId/$fileName.jpg');
+
+        UploadTask uploadTask = ref.putFile(file);
+        TaskSnapshot snapshot = await uploadTask;
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        imageLinks.add(downloadUrl);
+      }
+
+      final memoryData = {
+        'uid': currentUserId,
+        'imageLinks': imageLinks,
+        'restricted': true,
+        'timestamp': FieldValue.serverTimestamp(),
+        'viewStart': DateTime.now().toIso8601String(),
+        'viewEnd': DateTime.now().add(const Duration(days: 7)).toIso8601String(),
+        'canGetScreenshot': false,
+        'canGetVideoRecording': false,
+      };
+
+      await FirebaseFirestore.instance.collection('users').doc(currentUserId).collection('memories').add(memoryData);
+      setState(() {
+        isUploadedDone = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Memory uploaded successfully!'),
+          duration: Duration(seconds: 2),
         ),
-        child: Text(
-          text,
-          style: TextStyle(color: Colors.white, fontSize: 18.sp),
-        ),
-      ),
-    );
+      );
+
+      print("Memory uploaded successfully!");
+    } catch (e) {
+      print('Error uploading memory: $e');
+      throw Exception('Failed to upload memory.');
+    }
+
+    setState(() {
+      isUploadingMemory = false;
+    });
+  }
+
+  Widget listTile(String text, VoidCallback callback, {Color color = AppColor.backgroundColor, bool isloading = false}) {
+    return isloading
+        ? const Center(
+            child: CircularProgressIndicator(
+              color: AppColor.backgroundColor,
+            ),
+          )
+        : GestureDetector(
+            onTap: isloading
+                ? null
+                : () {
+                    callback();
+                  },
+            child: Container(
+              alignment: Alignment.center,
+              width: 360.w,
+              padding: EdgeInsets.all(18.r),
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: Text(
+                text,
+                style: TextStyle(color: Colors.white, fontSize: 18.sp),
+              ),
+            ),
+          );
   }
 }

@@ -10,6 +10,7 @@ export 'package:firebase_auth/firebase_auth.dart';
 export 'package:google_sign_in/google_sign_in.dart';
 export 'package:curved_navigation_bar/curved_navigation_bar.dart';
 export 'package:image_picker/image_picker.dart';
+export 'package:firebase_storage/firebase_storage.dart';
 
 // Core
 export 'package:horizon_travel_and_tours_android_application/core/theme/colors.dart';
@@ -32,6 +33,7 @@ export 'package:horizon_travel_and_tours_android_application/screens/splash/spla
 export 'package:horizon_travel_and_tours_android_application/screens/booking/confirmation_page.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/home/page/booked_trip_detail_page.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/memory/memory_screen.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/memory/send_memory_page.dart';
 
 // Utils
 export 'package:horizon_travel_and_tours_android_application/core/utils/navigator_util.dart';
