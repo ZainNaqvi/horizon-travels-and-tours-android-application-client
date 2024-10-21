@@ -41,7 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 42.h),
                 _buildCustomButton('Customize tour', callback: () {}),
                 SizedBox(height: 42.h),
-                _buildCustomButton('Create a memory', callback: () {}),
+                _buildCustomButton('Create a memory', callback: () {
+                  context.navigateWithSlideRightToLeft(const MemoryScreen());
+                }),
                 SizedBox(height: state.bookings.isNotEmpty ? 42.h : 0.h),
                 state.loading
                     ? const Padding(
