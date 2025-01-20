@@ -28,7 +28,7 @@ class Memory {
   factory Memory.fromDocument(DocumentSnapshot doc) {
     return Memory(
       id: doc.id,
-      allowedUsers: List<String>.from(doc['allowed_users'] ?? []),
+      allowedUsers: doc['allowed_user'] != null ? List<String>.from(doc['allowed_user']) : [],
       imageLinks: List<String>.from(doc['imageLinks'] ?? []),
       canGetScreenshot: doc['canGetScreenshot'] ?? false,
       canGetVideoRecording: doc['canGetVideoRecording'] ?? false,

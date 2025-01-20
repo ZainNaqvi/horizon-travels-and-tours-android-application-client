@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
+
 import '../../../exports.dart'; // Adjust the imports accordingly.
 
-void showFairyMeadowsModal(BuildContext context) {
+void showInfoModal(BuildContext context) {
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.white,
@@ -29,14 +31,40 @@ void showFairyMeadowsModal(BuildContext context) {
                   borderRadius: BorderRadius.circular(44.r),
                 ),
               ),
-              CustomAppBar(
-                title: 'Detail Hotel',
-                leadingIcon: Icons.arrow_back,
-                leadingCallback: () {
-                  Navigator.pop(context);
-                },
-                trailingIcon: Icons.bookmark_outlined,
-                trailingCallback: () {},
+              SizedBox(height: 8.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Text(
+                    "Details",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.calistoga(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: AppColor.textColor,
+                        fontSize: 24.sp,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.bookmark,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 8.h),
               Image.asset(AppAsset.details, height: 200.h),
@@ -55,17 +83,21 @@ void showFairyMeadowsModal(BuildContext context) {
                     SizedBox(height: 16.h),
                     _buildDescription(),
                     SizedBox(height: 16.h),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff4B6792),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Book Now',
-                        style: TextStyle(
-                          color: Colors.white,
+                    SizedBox(
+                      width: 360.w,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff4B6792),
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Book Now',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -85,7 +117,7 @@ Widget _buildTitleRow() {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       _textWithCustomStyle('Fairy Meadows', fontSize: 18.sp, fontWeight: FontWeight.w400),
-      _infoTile(Icons.star, '4.9'),
+      _infoTile(Icons.star_rate, '4.9'),
     ],
   );
 }
@@ -93,7 +125,7 @@ Widget _buildTitleRow() {
 Widget _buildLocationRow() {
   return Row(
     children: [
-      const Icon(Icons.my_location, color: Colors.grey),
+      const Icon(Icons.location_on, color: Colors.grey),
       SizedBox(width: 8.w),
       _textWithCustomStyle('Gilgit Baltistan', fontSize: 16.sp, fontWeight: FontWeight.w400, color: Colors.grey),
     ],
@@ -104,9 +136,9 @@ Widget _buildDurationOptions() {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      _durationTile(),
-      _durationTile(),
-      _durationTile(),
+      _durationTile('5 days'),
+      _durationTile('7 days'),
+      _durationTile('10 days'),
     ],
   );
 }
@@ -123,10 +155,13 @@ Widget _buildBottomMenuOptions() {
 }
 
 Widget _buildDescription() {
-  return _textWithCustomStyle(
-    'Fairy Meadows are idyllic alpine pastures surrounded by pine forest on the Northern slopes of Nanga Parbat. With breathtaking views of snow-clad mountains.',
-    fontSize: 14.sp,
-    color: Colors.grey,
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 12.w),
+    child: _textWithCustomStyle(
+      'Fairy Meadows are idyllic alpine pastures surrounded by pine forest on the Northern slopes of Nanga Parbat. With breathtaking views of snow-clad mountains.',
+      fontSize: 14.sp,
+      color: Colors.grey,
+    ),
   );
 }
 
@@ -140,22 +175,21 @@ Widget _infoTile(IconData icon, String text) {
   );
 }
 
-Widget _durationTile() {
-  return Container(
-    padding: EdgeInsets.all(8.r),
-    decoration: BoxDecoration(
-      color: Colors.grey.shade300,
-      borderRadius: BorderRadius.circular(50.r),
+Widget _durationTile(String duration) {
+  return Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12.r),
     ),
-    child: const Row(
-      children: [
-        Icon(Icons.watch, color: Colors.grey),
-        SizedBox(width: 4),
-        Text(
-          '5 days',
-          style: TextStyle(fontWeight: FontWeight.w300),
-        ),
-      ],
+    elevation: 2,
+    child: Padding(
+      padding: EdgeInsets.all(8.r),
+      child: Row(
+        children: [
+          Icon(Icons.access_time, color: Colors.grey),
+          SizedBox(width: 2.w),
+          _textWithCustomStyle(duration, fontWeight: FontWeight.w400, fontSize: 16.sp),
+        ],
+      ),
     ),
   );
 }

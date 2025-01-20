@@ -33,6 +33,7 @@ class BookingConfirmationPage extends StatelessWidget {
             builder: (context, state) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     'Confirm Your Booking',
@@ -42,78 +43,118 @@ class BookingConfirmationPage extends StatelessWidget {
                       fontSize: 28.sp,
                     ),
                   ),
-                  SizedBox(height: 20.h),
-                  Text(
-                    'Place: $placeName',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: AppColor.white,
-                      fontSize: 22.sp,
-                    ),
-                  ),
-                  SizedBox(height: 10.h),
-                  Text(
-                    'Duration: $duration',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: AppColor.white,
-                      fontSize: 22.sp,
-                    ),
-                  ),
+                  SizedBox(height: 24.h),
+                  _buildBookingDetailsTable(),
                   SizedBox(height: 40.h),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    ),
-                    onPressed: () async {
-                      if (!state.loading) {
-                        String result = await context.read<CommonCubit>().createBooking(
-                              placeId: placeId,
-                              placeName: placeName,
-                              duration: duration,
-                            );
-                        _showFinalMessage(context, result);
-                      }
-                    },
-                    child: state.loading
-                        ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          )
-                        : Text(
-                            'Send Booking Request',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                  ),
-                  SizedBox(height: 12.h),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    ),
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        NavigatorUtil.createRoute(const HomeScreen(), TransitionType.fade),
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                  ),
+                  _buildBookingButton(context, state),
+                  SizedBox(height: 16.h),
+                  _buildCancelButton(context),
                 ],
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBookingDetailsTable() {
+    return Table(
+      border: TableBorder.all(
+        color: AppColor.white,
+        width: 1,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      children: [
+        _buildTableRow('Place:', placeName),
+        _buildTableRow('Duration:', duration),
+      ],
+    );
+  }
+
+  TableRow _buildTableRow(String title, String value) {
+    return TableRow(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: AppColor.white,
+              fontSize: 18.sp,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            value,
+            style: TextStyle(
+              color: AppColor.white,
+              fontSize: 18.sp,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBookingButton(BuildContext context, CommonState state) {
+    return SizedBox(
+      width: 360.w,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        ),
+        onPressed: () async {
+          if (!state.loading) {
+            String result = await context.read<CommonCubit>().createBooking(
+                  placeId: placeId,
+                  placeName: placeName,
+                  duration: duration,
+                );
+            _showFinalMessage(context, result);
+          }
+        },
+        child: state.loading
+            ? const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+            : Text(
+                'Send Booking Request',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+      ),
+    );
+  }
+
+  Widget _buildCancelButton(BuildContext context) {
+    return SizedBox(
+      width: 360.w,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        ),
+        onPressed: () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            NavigatorUtil.createRoute(const HomeScreen(), TransitionType.fade),
+            (Route<dynamic> route) => false,
+          );
+        },
+        child: Text(
+          'Cancel',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

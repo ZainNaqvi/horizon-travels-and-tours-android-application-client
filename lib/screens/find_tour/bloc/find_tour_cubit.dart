@@ -3,7 +3,7 @@ import '../../../exports.dart';
 class FindTourCubit extends Cubit<FindTourState> {
   FindTourCubit() : super(const FindTourState());
 
-  void fetchPlaces() async {
+  Future<void> fetchPlaces() async {
     try {
       emit(state.copyWith(isLoading: true));
 

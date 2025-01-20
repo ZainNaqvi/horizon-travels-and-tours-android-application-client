@@ -14,7 +14,7 @@ class AuthCubit extends Cubit<AuthState> {
     String password = passwordController.text.trim();
     validator(context);
     emit(state.copyWith(isLoading: true));
-    String response = await _dbHelper.userLogin(context, email: email, password: password);
+    String response = await _dbHelper.loginUser(context: context, email: email, password: password);
     if (response == 'success') {
       context.navigateWithSlideRightToLeft(const HomeScreen());
     }
@@ -42,7 +42,7 @@ class AuthCubit extends Cubit<AuthState> {
     validator(context);
     emit(state.copyWith(isLoading: true));
     String response = await _dbHelper.createUser(
-      context,
+      context: context,
       name: name,
       imageUrl: imageUrl,
       email: email,
@@ -51,7 +51,6 @@ class AuthCubit extends Cubit<AuthState> {
     );
     if (response == 'success') {
       emit(state.copyWith(isLoading: false));
-      // ignore: use_build_context_synchronously
       context.navigateWithSlideRightToLeft(const SignInPage());
     }
     emit(state.copyWith(isLoading: false));
@@ -61,7 +60,7 @@ class AuthCubit extends Cubit<AuthState> {
     String email = emailController.text.trim();
     if (email.isNotEmpty) {
       emit(state.copyWith(isLoading: true));
-      await _dbHelper.forgotPassword(context, email: email);
+      await _dbHelper.forgotPassword(context: context, email: email);
       emit(state.copyWith(isLoading: false));
     } else {
       showToast('Email is required.', context);

@@ -214,10 +214,10 @@ class _UserTileState extends State<UserTile> {
 
     try {
       await memoryDocRef.update({
-        'allowed_users': FieldValue.arrayUnion([userId]),
+        'allowed_user': FieldValue.arrayUnion([userId]),
       });
 
-      print('User $userId has been added to allowed_users for memory $docID.');
+      print('User $userId has been added to allowed_user for memory $docID.');
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -226,7 +226,7 @@ class _UserTileState extends State<UserTile> {
         ),
       );
     } catch (e) {
-      print('Error adding user to allowed_users: $e');
+      print('Error adding user to allowed_user: $e');
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
