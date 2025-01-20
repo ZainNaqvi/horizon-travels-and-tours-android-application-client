@@ -9,6 +9,13 @@ class Booking {
   final String status;
   final Place? placeDetails;
 
+  final String roomType;
+  final bool includeLunch;
+  final bool includeJeepCharges;
+  final String transportMode;
+  final List<String> additionalServices;
+  final bool privateTrip;
+
   Booking({
     required this.userId,
     required this.placeId,
@@ -17,8 +24,15 @@ class Booking {
     required this.createdAt,
     required this.status,
     this.placeDetails,
+    required this.roomType,
+    required this.includeLunch,
+    required this.includeJeepCharges,
+    required this.transportMode,
+    required this.additionalServices,
+    required this.privateTrip,
   });
 
+  // Convert Booking to JSON
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
@@ -27,9 +41,17 @@ class Booking {
       'duration': duration,
       'createdAt': createdAt.toIso8601String(),
       'status': status,
+      'roomType': roomType,
+      'includeLunch': includeLunch,
+      'includeJeepCharges': includeJeepCharges,
+      'transportMode': transportMode,
+      'additionalServices': additionalServices,
+      'privateTrip': privateTrip,
+      'placeDetails': placeDetails?.toJson(),
     };
   }
 
+  // Create Booking from JSON
   factory Booking.fromJson(Map<String, dynamic> json) {
     return Booking(
       userId: json['userId'],
@@ -39,10 +61,16 @@ class Booking {
       createdAt: DateTime.parse(json['createdAt']),
       status: json['status'],
       placeDetails: json['placeDetails'] != null ? Place.fromJson(json['placeDetails']) : null,
+      roomType: json['roomType'],
+      includeLunch: json['includeLunch'],
+      includeJeepCharges: json['includeJeepCharges'],
+      transportMode: json['transportMode'],
+      additionalServices: List<String>.from(json['additionalServices']),
+      privateTrip: json['privateTrip'],
     );
   }
 
-  // CopyWith method
+  // CopyWith method for immutability
   Booking copyWith({
     String? userId,
     String? placeId,
@@ -51,6 +79,12 @@ class Booking {
     DateTime? createdAt,
     String? status,
     Place? placeDetails,
+    String? roomType,
+    bool? includeLunch,
+    bool? includeJeepCharges,
+    String? transportMode,
+    List<String>? additionalServices,
+    bool? privateTrip,
   }) {
     return Booking(
       userId: userId ?? this.userId,
@@ -60,6 +94,12 @@ class Booking {
       createdAt: createdAt ?? this.createdAt,
       status: status ?? this.status,
       placeDetails: placeDetails ?? this.placeDetails,
+      roomType: roomType ?? this.roomType,
+      includeLunch: includeLunch ?? this.includeLunch,
+      includeJeepCharges: includeJeepCharges ?? this.includeJeepCharges,
+      transportMode: transportMode ?? this.transportMode,
+      additionalServices: additionalServices ?? this.additionalServices,
+      privateTrip: privateTrip ?? this.privateTrip,
     );
   }
 }

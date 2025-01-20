@@ -25,7 +25,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
   }
 
   Future<void> _uploadImage() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
+    final List<XFile> images = await _picker.pickMultiImage();
     if (images != null) {
       setState(() {
         _imagePaths.addAll(images.map((image) => image.path));

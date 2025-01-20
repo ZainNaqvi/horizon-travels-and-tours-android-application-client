@@ -1,3 +1,5 @@
+import 'package:horizon_travel_and_tours_android_application/screens/customized_trip/customized_trip.dart';
+
 import '../../../../exports.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -141,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         _buildCustomButton(
           'Customize tour',
-          callback: () {},
+          callback: () => context.navigateWithSlideRightToLeft(const CustomizedTripScreen()),
         ),
         _buildCustomButton(
           'Create a memory',
@@ -166,14 +168,18 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildCustomButton(
             'Shared Memories',
             callback: () {
-              // context.navigateWithSlideBottomToTop(const SharedMemoriesPage());
+              context.navigateWithSlideBottomToTop(const MyCreatedMemories(
+                isUserCreatedMemories: false,
+              ));
             },
           ),
         if (state.userCreatedMemories.isNotEmpty)
           _buildCustomButton(
             'My Created Memories',
             callback: () {
-              // context.navigateWithSlideBottomToTop(const MyCreatedMemoriesPage());
+              context.navigateWithSlideBottomToTop(const MyCreatedMemories(
+                isUserCreatedMemories: true,
+              ));
             },
           ),
       ],

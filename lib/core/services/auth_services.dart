@@ -134,11 +134,18 @@ class DbHelper {
     }
   }
 
-  /// [Create a booking]
+  /// [Create a booking with customization options]
   Future<String> createBooking({
     required String placeId,
     required String placeName,
     required String duration,
+    String? bookingType,
+    String? roomType,
+    bool? includeLunch,
+    bool? includeJeepCharges,
+    String transportMode = "Van",
+    List<String> additionalServices = const [],
+    bool privateTrip = false,
   }) async {
     try {
       final currentUser = _auth.currentUser;
@@ -151,6 +158,12 @@ class DbHelper {
         duration: duration,
         createdAt: DateTime.now(),
         status: 'Pending',
+        roomType: roomType ?? "Standard",
+        includeLunch: includeLunch ?? false,
+        includeJeepCharges: includeJeepCharges ?? false,
+        transportMode: transportMode,
+        additionalServices: additionalServices,
+        privateTrip: privateTrip,
       );
 
       await _firestore.collection(_bookingCollection).add(booking.toJson());

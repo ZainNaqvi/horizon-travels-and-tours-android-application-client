@@ -3,9 +3,8 @@ import 'dart:developer';
 import '../../exports.dart';
 
 class CommonCubit extends Cubit<CommonState> {
-  final DbHelper _dbHelper;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  CommonCubit(this._dbHelper) : super(const CommonState());
+  CommonCubit() : super(const CommonState());
 
   static const String memoriesCollection = 'memories';
   static const String userCollection = 'user';
@@ -18,12 +17,26 @@ class CommonCubit extends Cubit<CommonState> {
     required String placeId,
     required String placeName,
     required String duration,
+    String? bookingType,
+    String? roomType,
+    bool? includeLunch,
+    bool? includeJeepCharges,
+    String transportMode = "Van",
+    List<String> additionalServices = const [],
+    bool privateTrip = false,
   }) async {
     showLoading();
-    String result = await _dbHelper.createBooking(
+    String result = await DbHelper().createBooking(
       placeId: placeId,
       placeName: placeName,
       duration: duration,
+      additionalServices: additionalServices,
+      transportMode: transportMode,
+      bookingType: bookingType,
+      includeJeepCharges: includeJeepCharges,
+      includeLunch: includeJeepCharges,
+      privateTrip: privateTrip,
+      roomType: roomType,
     );
     hideLoading();
     return result;
@@ -33,12 +46,12 @@ class CommonCubit extends Cubit<CommonState> {
   Future<void> fetchUserBookings() async {
     showLoading();
     try {
-      List<Booking> bookings = await _dbHelper.fetchUserBookings();
+      List<Booking> bookings = await DbHelper().fetchUserBookings();
 
       List<Booking> bookingsWithPlaces = [];
 
       for (var booking in bookings) {
-        Place? place = await _dbHelper.getPlaceById(booking.placeId);
+        Place? place = await DbHelper().getPlaceById(booking.placeId);
         bookingsWithPlaces.add(
           booking.copyWith(placeDetails: place),
         );
@@ -64,7 +77,13 @@ class CommonCubit extends Cubit<CommonState> {
       if (filterField == allowedUsersField) {
         query = _firebaseFirestore.collection(memoriesCollection).where(filterField, arrayContains: filterValue);
       } else {
-        query = _firebaseFirestore.collection(memoriesCollection).where(filterField, isEqualTo: filterValue);
+        query = _firebaseFirestore
+            .collection(memoriesCollection)
+            .where(
+              filterField,
+              isEqualTo: filterValue,
+            )
+            .orderBy('timestamp', descending: true);
       }
 
       final querySnapshot = await query.get();

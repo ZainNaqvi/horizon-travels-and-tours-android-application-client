@@ -18,7 +18,7 @@ void main() async {
     providers: [
       BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
       BlocProvider<FindTourCubit>(create: (context) => FindTourCubit()),
-      BlocProvider<CommonCubit>(create: (context) => CommonCubit(DbHelper())),
+      BlocProvider<CommonCubit>(create: (context) => CommonCubit()),
     ],
     child: const MainApp(),
   ));
