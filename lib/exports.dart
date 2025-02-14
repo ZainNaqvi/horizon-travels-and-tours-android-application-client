@@ -14,6 +14,7 @@ export 'package:firebase_storage/firebase_storage.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:cached_network_image/cached_network_image.dart';
 export 'package:flutter_windowmanager/flutter_windowmanager.dart';
+export 'package:flutter_svg/svg.dart';
 
 // Core
 export 'package:horizon_travel_and_tours_android_application/core/theme/colors.dart';
@@ -24,6 +25,7 @@ export 'package:horizon_travel_and_tours_android_application/core/res/asset_path
 export 'package:horizon_travel_and_tours_android_application/core/components/app.dart';
 export 'package:horizon_travel_and_tours_android_application/core/components/app_logo.dart';
 export 'package:horizon_travel_and_tours_android_application/core/components/custom_button.dart';
+export 'package:horizon_travel_and_tours_android_application/core/components/social_media_button_component.dart';
 
 // Screens
 export 'package:horizon_travel_and_tours_android_application/screens/auth/pages/signup_page.dart';

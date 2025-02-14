@@ -3,16 +3,22 @@ import '../../exports.dart';
 class AppLogo extends StatelessWidget {
   final double width;
   final double height;
-  final Color color;
+  final String asset;
+
   const AppLogo({
     super.key,
-    this.width = 164,
-    this.height = 84,
-    this.color = Colors.black,
+    required this.width,
+    required this.height,
+    required this.asset,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox();
+    return Image.asset(
+      asset,
+      fit: BoxFit.cover,
+      width: width.w,
+      height: height.w,
+    );
   }
 }

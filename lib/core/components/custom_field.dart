@@ -1,97 +1,105 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomField extends StatelessWidget {
-  final TextEditingController? controller;
+class CutomInputField extends StatelessWidget {
   final String? hintText;
-  final String title;
-  final Color titleColor;
-  final double titleFontSize;
-  final FontWeight fontWeight;
-  final TextInputAction? textInputAction;
-  final TextInputType? keyboardType;
-  final List<TextInputFormatter>? inputFormatters;
-  final double borderRadius;
-  final EdgeInsetsGeometry padding;
-  final Color cursorColor;
-  final int maxLines;
-  final double fontSize;
-  final double? width;
-  final bool obscureText;
-  final String? Function(String?)? validator; // Added for validation
+  final String hint;
+  final ValueChanged<String>? onChanged;
+  final FormFieldValidator<String>? validator;
+  final int? maxLine;
+  final Icon? icon;
+  final Widget? suffixIcon;
+  final VoidCallback? onTapSuffixIcon;
+  final TextEditingController? controller;
+  final AutovalidateMode autoValidateMode;
+  final FocusNode? focusNode;
+  final bool isObscure;
 
-  const CustomField({
+  const CutomInputField({
     super.key,
-    this.controller,
     this.hintText,
-    this.textInputAction,
-    this.keyboardType,
-    this.inputFormatters,
-    this.borderRadius = 2,
-    this.padding = const EdgeInsets.symmetric(horizontal: 14),
-    this.cursorColor = Colors.blue,
-    this.fontSize = 20,
-    this.maxLines = 1,
-    this.width,
-    this.obscureText = false,
-    required this.title,
-    this.titleColor = Colors.black,
-    this.titleFontSize = 20,
-    this.fontWeight = FontWeight.w400,
+    this.onChanged,
     this.validator,
+    this.maxLine,
+    this.controller,
+    this.icon,
+    this.suffixIcon,
+    this.onTapSuffixIcon,
+    this.focusNode,
+    this.autoValidateMode = AutovalidateMode.onUserInteraction,
+    this.isObscure = false,
+    required this.hint,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: titleColor,
-            fontSize: titleFontSize,
-            fontWeight: fontWeight,
-          ),
-        ),
-        SizedBox(height: 12.h),
-        SizedBox(
-          width: 360.w,
-          child: TextFormField(
-            cursorColor: cursorColor,
-            controller: controller,
-            textInputAction: textInputAction,
-            keyboardType: keyboardType,
-            obscureText: obscureText,
-            maxLines: maxLines,
-            inputFormatters: inputFormatters,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: fontSize,
-            ),
-            decoration: InputDecoration(
-              fillColor: Colors.blue.withOpacity(0.2),
-              filled: true,
-              enabledBorder: _outlineBorder(),
-              focusedBorder: _outlineBorder(),
-              border: _outlineBorder(),
-              hintText: hintText,
-              hintStyle: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-                fontSize: fontSize,
-              ),
-            ),
-          ),
-        ),
-      ],
+  OutlineInputBorder customOutlineInputBorder() {
+    return const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.white),
+      borderRadius: BorderRadius.only(
+        topRight: Radius.circular(8.0),
+        bottomRight: Radius.circular(8.0),
+      ),
     );
   }
 
-  OutlineInputBorder _outlineBorder() {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: Colors.transparent),
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 48.h,
+      child: Row(
+        children: [
+          Container(
+            alignment: Alignment.center,
+            width: 100.w,
+            height: 56.h,
+            decoration: const BoxDecoration(
+              color: Color(0xffEEF0F2),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.0),
+                bottomLeft: Radius.circular(8.0),
+              ),
+            ),
+            child: Text(
+              hint,
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: const Color(0xff495A68),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Expanded(
+            child: TextFormField(
+              focusNode: focusNode,
+              controller: controller,
+              textInputAction: TextInputAction.done,
+              autovalidateMode: autoValidateMode,
+              cursorColor: Colors.grey,
+              maxLines: maxLine ?? 1,
+              obscureText: isObscure,
+              style: const TextStyle(color: Colors.black),
+              decoration: InputDecoration(
+                prefixIcon: icon,
+                hintStyle: TextStyle(fontSize: 14.sp),
+                hintText: hintText,
+                suffixIcon: suffixIcon != null
+                    ? GestureDetector(
+                        onTap: onTapSuffixIcon,
+                        child: suffixIcon,
+                      )
+                    : null,
+                filled: true,
+                fillColor: Colors.white,
+                focusedBorder: customOutlineInputBorder(),
+                enabledBorder: customOutlineInputBorder(),
+                border: customOutlineInputBorder(),
+              ),
+              onChanged: onChanged,
+              validator: validator,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

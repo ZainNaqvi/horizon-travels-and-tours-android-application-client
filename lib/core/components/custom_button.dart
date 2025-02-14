@@ -1,53 +1,73 @@
-import '../../exports.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:horizon_travel_and_tours_android_application/core/theme/colors.dart';
 
 class CustomButton extends StatelessWidget {
-  final String text;
-  final VoidCallback callback;
-  final double width;
-  final bool isloading;
-  final Color color;
-  final FontWeight fontWeight;
-  final Color bgColor;
-  final double radius;
+  final VoidCallback onPressed;
+  final String buttonText;
+  final bool isUrduText;
+  final Widget? widget;
+  final bool isShowdow;
+  final bool isBtnDisabled;
+  final double fontSize;
+  final Color backgrounColor;
+  final bool isPdf;
+
   const CustomButton({
+    required this.onPressed,
+    required this.buttonText,
+    this.isUrduText = false,
+    this.isPdf = false,
+    this.widget,
+    this.fontSize = 16,
+    this.isShowdow = true,
+    this.backgrounColor = AppColor.authButton,
+    this.isBtnDisabled = false,
     super.key,
-    required this.text,
-    required this.callback,
-    this.color = Colors.black,
-    this.bgColor = Colors.white,
-    this.isloading = false,
-    this.radius = 12,
-    this.fontWeight = FontWeight.w500,
-    this.width = 360,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12.r),
-        onTap: callback,
-        child: Ink(
-          width: width.w,
-          height: 50.h,
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(radius.r),
+    return Container(
+      height: 42.h,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.white.withOpacity(0.2),
+            blurRadius: 0.1,
+            offset: const Offset(0, 1),
+            spreadRadius: 1,
           ),
-          child: Center(
-            child: isloading
-                ? const CircularProgressIndicator(
+        ],
+        color: Colors.amber,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: ElevatedButton(
+        onPressed: isBtnDisabled ? null : onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgrounColor,
+          minimumSize: Size(382.w, 48.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          padding: EdgeInsets.zero,
+          elevation: 0.0,
+        ),
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Container(
+            alignment: Alignment.center,
+            child: widget ??
+                Text(
+                  buttonText.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: fontSize.sp,
                     color: Colors.white,
-                  )
-                : Text(
-                    text,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: fontWeight,
-                      color: color,
-                      fontSize: 18.sp,
-                    ),
+                    fontWeight: FontWeight.w500,
                   ),
+                ),
           ),
         ),
       ),

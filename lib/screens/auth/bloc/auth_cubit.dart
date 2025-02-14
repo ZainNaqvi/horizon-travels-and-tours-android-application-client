@@ -10,13 +10,15 @@ class AuthCubit extends Cubit<AuthState> {
   TextEditingController passwordController = TextEditingController();
 
   void signin(BuildContext context) async {
+    emit(state.copyWith(isLoading: true));
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
-    validator(context);
-    emit(state.copyWith(isLoading: true));
-    String response = await _dbHelper.loginUser(context: context, email: email, password: password);
-    if (response == 'success') {
-      context.navigateWithSlideRightToLeft(const HomeScreen());
+    bool result = validator(context);
+    if (result) {
+      String response = await _dbHelper.loginUser(context: context, email: email, password: password);
+      if (response == 'success') {
+        context.replaceWithFade(const HomeScreen());
+      }
     }
     emit(state.copyWith(isLoading: false));
   }
@@ -38,8 +40,19 @@ class AuthCubit extends Cubit<AuthState> {
       showToast('Username should contain at least 2 words.', context);
       return;
     }
+    if (!isEmailValid(email)) {
+      showToast('Please enter a valid email address.', context);
+      return;
+    }
+    if (password.isEmpty) {
+      showToast('Password is required', context);
+      return;
+    }
+    if (password.length < 6) {
+      showToast('Password should be at least 6 characters long.', context);
+      return;
+    }
 
-    validator(context);
     emit(state.copyWith(isLoading: true));
     String response = await _dbHelper.createUser(
       context: context,
@@ -57,14 +70,20 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void forgotPassword(BuildContext context) async {
+    emit(state.copyWith(isLoading: true));
+
     String email = emailController.text.trim();
     if (email.isNotEmpty) {
-      emit(state.copyWith(isLoading: true));
+      if (!isEmailValid(email)) {
+        showToast('Please enter a valid email address.', context);
+        return;
+      }
+
       await _dbHelper.forgotPassword(context: context, email: email);
-      emit(state.copyWith(isLoading: false));
     } else {
       showToast('Email is required.', context);
     }
+    emit(state.copyWith(isLoading: false));
   }
 
   void loginWithGoogle(BuildContext context) async {
@@ -86,28 +105,30 @@ class AuthCubit extends Cubit<AuthState> {
     passwordController.clear();
   }
 
-  void validator(BuildContext context) {
+  bool validator(BuildContext context) {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
     if (email.isEmpty) {
       showToast('Email is required.', context);
-      return;
+      return false;
     }
 
     if (!isEmailValid(email)) {
       showToast('Please enter a valid email address.', context);
-      return;
+      return false;
     }
 
     if (password.isEmpty) {
       showToast('Password is required.', context);
-      return;
+      return false;
     }
 
     if (password.length <= 6) {
       showToast('Password must be at least 7 characters.', context);
-      return;
+      return false;
     }
+
+    return true;
   }
 }

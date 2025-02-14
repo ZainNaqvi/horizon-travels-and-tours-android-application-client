@@ -1,3 +1,4 @@
+import 'package:horizon_travel_and_tours_android_application/core/components/text_component.dart';
 import 'package:horizon_travel_and_tours_android_application/screens/customized_trip/customized_trip.dart';
 
 import '../../../../exports.dart';
@@ -35,17 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
       child: BlocBuilder<CommonCubit, CommonState>(
         builder: (_, state) {
           return Scaffold(
-            backgroundColor: AppColor.backgroundColor,
+            drawer: const Drawer(),
+            backgroundColor: AppColor.white,
             appBar: _buildAppBar(state, context),
             body: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildAppLogo(),
                   SizedBox(height: 24.h),
                   _buildButtonsSection(context, state),
-                  if (hasContent(state)) const Divider(),
                   _buildDynamicSections(context, state),
                 ],
               ),
@@ -58,17 +58,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppBar _buildAppBar(CommonState state, BuildContext context) {
     return AppBar(
-      backgroundColor: AppColor.backgroundColor,
+      backgroundColor: AppColor.white,
       elevation: 0,
-      actions: state.userInvites.isNotEmpty
-          ? [
-              _buildNotificationIcon(
-                context,
-                state.userInvites.length,
-              ),
-              SizedBox(width: 12.w),
-            ]
-          : null,
+      title: const TextComponent(
+        text: "Horizon Travel!",
+      ),
+      systemOverlayStyle: systemOverlaySetting(),
+      actions: [
+        Image.asset(AppAsset.avatar),
+        if (state.userInvites.isNotEmpty)
+          _buildNotificationIcon(
+            context,
+            state.userInvites.length,
+          ),
+        SizedBox(width: 12.w),
+      ],
     );
   }
 
@@ -121,33 +125,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCustomButton(String text, {required VoidCallback callback, Color? color}) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
-      child: CustomButton(
-        fontWeight: FontWeight.w500,
-        color: AppColor.textColor,
-        bgColor: color ?? Colors.white,
-        text: text,
-        callback: callback,
-      ),
-    );
-  }
-
   Widget _buildButtonsSection(BuildContext context, CommonState state) {
     return Column(
       children: [
-        _buildCustomButton(
-          'Find a tour',
-          callback: () => context.navigateWithSlideRightToLeft(const FindTourPage()),
+        CustomButton(
+          buttonText: 'Find a tour',
+          onPressed: () => context.navigateWithSlideRightToLeft(const FindTourPage()),
         ),
-        _buildCustomButton(
-          'Customize tour',
-          callback: () => context.navigateWithSlideRightToLeft(const CustomizedTripScreen()),
+        SizedBox(height: 12.h),
+        CustomButton(
+          buttonText: 'Customize tour',
+          onPressed: () => context.navigateWithSlideRightToLeft(const CustomizedTripScreen()),
         ),
-        _buildCustomButton(
-          'Create a memory',
-          callback: () => context.navigateWithSlideRightToLeft(const MemoryScreen()),
+        SizedBox(height: 12.h),
+        CustomButton(
+          buttonText: 'Create a memory',
+          onPressed: () => context.navigateWithSlideRightToLeft(const MemoryScreen()),
         ),
       ],
     );
@@ -159,28 +152,36 @@ class _HomeScreenState extends State<HomeScreen> {
         if (state.loading)
           const Center(child: CircularProgressIndicator(color: Colors.blueAccent))
         else if (state.bookings.isNotEmpty)
-          _buildCustomButton(
-            'Booked Trip Details',
-            color: Colors.teal,
-            callback: () => context.navigateWithSlideBottomToTop(const BookedTripDetailsPage()),
+          Padding(
+            padding: EdgeInsets.only(top: 12.h),
+            child: CustomButton(
+              buttonText: 'Booked Trip Details',
+              onPressed: () => context.navigateWithSlideBottomToTop(const BookedTripDetailsPage()),
+            ),
           ),
         if (state.userSharedMemories.isNotEmpty)
-          _buildCustomButton(
-            'Shared Memories',
-            callback: () {
-              context.navigateWithSlideBottomToTop(const MyCreatedMemories(
-                isUserCreatedMemories: false,
-              ));
-            },
+          Padding(
+            padding: EdgeInsets.only(top: 12.h),
+            child: CustomButton(
+              buttonText: 'Shared Memories',
+              onPressed: () {
+                context.navigateWithSlideBottomToTop(const MyCreatedMemories(
+                  isUserCreatedMemories: false,
+                ));
+              },
+            ),
           ),
         if (state.userCreatedMemories.isNotEmpty)
-          _buildCustomButton(
-            'My Created Memories',
-            callback: () {
-              context.navigateWithSlideBottomToTop(const MyCreatedMemories(
-                isUserCreatedMemories: true,
-              ));
-            },
+          Padding(
+            padding: EdgeInsets.only(top: 12.h),
+            child: CustomButton(
+              buttonText: 'My Created Memories',
+              onPressed: () {
+                context.navigateWithSlideBottomToTop(const MyCreatedMemories(
+                  isUserCreatedMemories: true,
+                ));
+              },
+            ),
           ),
       ],
     );

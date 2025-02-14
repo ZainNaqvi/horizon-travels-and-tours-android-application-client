@@ -19,104 +19,64 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        context.replaceWithFade(const OnboardingPage());
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
-        appBar: AppBar(
-          title: const Text('Forgot Password', style: TextStyle(color: Colors.white)),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.replaceWithFade(const OnboardingPage()),
-          ),
-          backgroundColor: AppColor.backgroundColor,
-          iconTheme: const IconThemeData(color: Colors.white),
-          systemOverlayStyle: systemOverlaySetting(),
-        ),
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: AppColor.authBackground,
+      appBar: AppBar(
+        backgroundColor: AppColor.authBackground,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
             return Form(
               key: formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 44.h),
-                  _buildAppLogo(),
-                  SizedBox(height: 100.h),
-                  _buildCustomField(
-                    'User Email',
-                    context.read<AuthCubit>().emailController,
+                  AppLogo(
+                    asset: AppAsset.icon,
+                    height: 85.h,
+                    width: 360.w,
                   ),
-                  SizedBox(height: 24.h),
-                  _buildCustomButton(
-                    'Send',
-                    state.isLoading,
-                    callback: () => context.read<AuthCubit>().forgotPassword(context),
-                    bg: AppColor.backgroundColor,
+                  SizedBox(height: 18.h),
+                  CutomInputField(
+                    hint: "Email",
+                    hintText: "Enter email",
+                    controller: context.read<AuthCubit>().emailController,
                   ),
-                  SizedBox(height: 44.h),
-                  Text(
-                    'Password reset email will be sent to your email',
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
+                  SizedBox(height: 18.h),
+                  CustomButton(
+                    buttonText: 'Send Reset Link',
+                    widget: state.isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : null,
+                    onPressed: () => context.read<AuthCubit>().forgotPassword(context),
+                  ),
+                  SizedBox(height: 28.h),
+                  SizedBox(
+                    width: 244.w,
+                    child: Text(
+                      'To recover your password, you need to enter your registerd email address we will send the recovery code to your email',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                        height: 1.8,
+                      ),
                     ),
                   ),
+                  SizedBox(height: 56.h),
                 ],
               ),
             );
           }),
         ),
       ),
-    );
-  }
-
-  Align _buildForgotPasswordButton() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: TextButton(
-        onPressed: () {},
-        child: const Text('Forgot Password'),
-      ),
-    );
-  }
-
-  Widget _buildAppLogo() {
-    return AppLogo(height: 124.h, width: 124.w);
-  }
-
-  Widget _buildCustomField(
-    String title,
-    TextEditingController controller, {
-    bool obscureText = false,
-    TextInputType textInputType = TextInputType.emailAddress,
-  }) {
-    return CustomField(
-      title: title,
-      keyboardType: textInputType,
-      width: 300.w,
-      controller: controller,
-      obscureText: obscureText,
-    );
-  }
-
-  Widget _buildCustomButton(
-    String text,
-    bool isloading, {
-    required VoidCallback callback,
-    Color bg = Colors.white,
-    Color textColor = Colors.white,
-  }) {
-    return CustomButton(
-      text: text,
-      isloading: isloading,
-      callback: callback,
-      bgColor: bg,
-      color: textColor,
     );
   }
 }

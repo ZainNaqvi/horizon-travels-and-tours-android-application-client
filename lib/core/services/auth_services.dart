@@ -98,7 +98,7 @@ class DbHelper {
   Future<void> forgotPassword({required BuildContext context, required String email}) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
-      showToast('Password reset email sent.', context);
+      showToast('Password reset email sent.', context, toastGravity: ToastGravity.TOP);
     } catch (e) {
       log("Error resetting password: $e");
       showToast("Failed to send password reset email.", context);
@@ -210,8 +210,10 @@ class DbHelper {
       'wrong-password': "Incorrect password.",
       'weak-password': "The password provided is too weak.",
       'email-already-in-use': "An account already exists with this email.",
+      "invalid-credential": "Invalid Credentials",
     };
-    final message = errorMessages[err.code] ?? "An error occurred.";
+    log(err.code);
+    final message = errorMessages[err.code] ?? "";
     showToast(message, context);
     return message;
   }

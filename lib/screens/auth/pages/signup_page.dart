@@ -10,6 +10,14 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  bool isPasswordVisible = true;
+
+  void togglePasswordVisibility() {
+    setState(() {
+      isPasswordVisible = !isPasswordVisible;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -21,106 +29,148 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        context.replaceWithFade(const OnboardingPage());
+        // context.replaceWithFade(const OnboardingPage());
         return true;
       },
       child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
+        backgroundColor: AppColor.authBackground,
         appBar: AppBar(
-          title: const Text('Sign Up', style: TextStyle(color: Colors.white)),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.replaceWithFade(const OnboardingPage()),
-          ),
-          backgroundColor: AppColor.backgroundColor,
+          backgroundColor: AppColor.authBackground,
           iconTheme: const IconThemeData(color: Colors.white),
-          systemOverlayStyle: systemOverlaySetting(),
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-            return Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 24.h),
-                  _buildAppLogo(),
-                  SizedBox(height: 34.h),
-                  _buildCustomField(
-                    'User Name',
-                    context.read<AuthCubit>().usernameController,
-                  ),
-                  SizedBox(height: 12.h),
-                  _buildCustomField(
-                    'User Email',
-                    context.read<AuthCubit>().emailController,
-                  ),
-                  SizedBox(height: 12.h),
-                  _buildCustomField(
-                    'Set Password',
-                    context.read<AuthCubit>().passwordController,
-                    obscureText: true,
-                    textInputType: TextInputType.text,
-                  ),
-                  SizedBox(height: 32.h),
-                  _buildCustomButton(
-                    'Sign up',
-                    state.isLoading,
-                    callback: () => context.read<AuthCubit>().signup(context),
-                    bg: AppColor.backgroundColor,
-                  ),
-                  SizedBox(height: 12.h),
-                  _buildCustomButton(
-                    'Signup With Google',
-                    state.loadingGoogleAccount,
-                    callback: () => context.read<AuthCubit>().loginWithGoogle(context),
-                    bg: Colors.pink.shade50,
-                    textColor: Colors.pinkAccent,
-                  ),
-                  SizedBox(height: 32.h),
-                ],
-              ),
-            );
-          }),
+        body: Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+              return Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppLogo(
+                      asset: AppAsset.icon,
+                      height: 85.h,
+                      width: 360.w,
+                    ),
+                    SizedBox(height: 18.h),
+                    CutomInputField(
+                      hint: "Name",
+                      hintText: "Enter name",
+                      controller: context.read<AuthCubit>().usernameController,
+                    ),
+                    SizedBox(height: 12.h),
+                    CutomInputField(
+                      hint: "Email",
+                      hintText: "Enter email",
+                      controller: context.read<AuthCubit>().emailController,
+                    ),
+                    SizedBox(height: 12.h),
+                    CutomInputField(
+                      hint: "Password",
+                      controller: context.read<AuthCubit>().passwordController,
+                      hintText: "Enter password",
+                      isObscure: isPasswordVisible,
+                      suffixIcon: IconButton(
+                        icon: SvgPicture.asset(
+                          isPasswordVisible ? AppAsset.eyeVisibilityOnn : AppAsset.eyeVisibilityOff,
+                        ),
+                        onPressed: () => togglePasswordVisibility(),
+                      ),
+                    ),
+                    SizedBox(height: 18.h),
+                    CustomButton(
+                      buttonText: 'Sign Up',
+                      widget: state.isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : null,
+                      onPressed: () => context.read<AuthCubit>().signup(context),
+                    ),
+                    SizedBox(height: 14.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Flexible(
+                          child: Divider(
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 44.h,
+                          width: 44.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.blue),
+                          ),
+                          child: Text(
+                            "OR",
+                            style: TextStyle(fontSize: 16.sp, color: Colors.black),
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+                        const Flexible(
+                          child: Divider(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 14.h),
+                    SocialMediaButton(
+                      buttonText: 'Sign Up with Gmail',
+                      imagePath: AppAsset.google,
+                      onPressed: () => context.read<AuthCubit>().loginWithGoogle(context),
+                      fontSize: 12.sp,
+                      widget: state.loadingGoogleAccount
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : null,
+                    ),
+                    SizedBox(height: 28.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Already have an account? ",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w300,
+                            letterSpacing: 1.1,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            context.replaceWithFade(const SignInPage());
+                          },
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              letterSpacing: 1.1,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 56.h),
+                  ],
+                ),
+              );
+            }),
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _buildAppLogo() {
-    return AppLogo(height: 124.h, width: 124.w);
-  }
-
-  Widget _buildCustomField(
-    String title,
-    TextEditingController controller, {
-    bool obscureText = false,
-    TextInputType textInputType = TextInputType.emailAddress,
-  }) {
-    return CustomField(
-      title: title,
-      keyboardType: textInputType,
-      width: 300.w,
-      controller: controller,
-      obscureText: obscureText,
-    );
-  }
-
-  Widget _buildCustomButton(
-    String text,
-    bool isloading, {
-    required VoidCallback callback,
-    Color bg = Colors.white,
-    Color textColor = Colors.white,
-  }) {
-    return CustomButton(
-      text: text,
-      isloading: isloading,
-      callback: callback,
-      bgColor: bg,
-      color: textColor,
     );
   }
 }
