@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="Horizon Travel And Tours"
+        android:label="Horizon Trips And Tours"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

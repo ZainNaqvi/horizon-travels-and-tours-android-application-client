@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColor.white,
       elevation: 0,
       title: const TextComponent(
-        text: "Horizon Travel!",
+        text: "Horizon Trips!",
       ),
       systemOverlayStyle: systemOverlaySetting(),
       actions: [
