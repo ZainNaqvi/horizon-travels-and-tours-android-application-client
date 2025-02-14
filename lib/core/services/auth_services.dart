@@ -217,4 +217,8 @@ class DbHelper {
     showToast(message, context);
     return message;
   }
+
+  Future<void> logout() async {
+    await _auth.signOut();
+  }
 }

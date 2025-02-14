@@ -21,6 +21,13 @@ class _SignInPageState extends State<SignInPage> {
   @override
   void initState() {
     super.initState();
+    const SystemUiOverlayStyle(
+      statusBarColor: AppColor.authBackground,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light,
+      systemNavigationBarColor: AppColor.authBackground,
+      systemNavigationBarDividerColor: Colors.transparent,
+    );
     context.read<AuthCubit>().clear();
   }
 

@@ -1,3 +1,4 @@
+import 'package:horizon_travel_and_tours_android_application/core/components/drawer_component.dart';
 import 'package:horizon_travel_and_tours_android_application/core/components/text_component.dart';
 import 'package:horizon_travel_and_tours_android_application/screens/customized_trip/customized_trip.dart';
 
@@ -36,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: BlocBuilder<CommonCubit, CommonState>(
         builder: (_, state) {
           return Scaffold(
-            drawer: const Drawer(),
+            drawer: const MyDrawer(),
             backgroundColor: AppColor.white,
             appBar: _buildAppBar(state, context),
             body: SingleChildScrollView(

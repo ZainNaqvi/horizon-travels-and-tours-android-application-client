@@ -95,8 +95,10 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(loadingGoogleAccount: false));
   }
 
-  void signOut() {
+  Future<void> signOut(BuildContext context) async {
+    await _dbHelper.logout();
     emit(const AuthState());
+    context.replaceWithSlideBottomToTop(const SignInPage());
   }
 
   void clear() {
