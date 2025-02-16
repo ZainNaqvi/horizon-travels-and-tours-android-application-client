@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:horizon_travel_and_tours_android_application/core/components/drawer_component.dart';
+import 'package:horizon_travel_and_tours_android_application/core/components/floating_action_button_component.dart';
 import 'package:horizon_travel_and_tours_android_application/core/components/search_field_component.dart';
 import 'package:horizon_travel_and_tours_android_application/core/components/text_component.dart';
 import 'package:horizon_travel_and_tours_android_application/core/components/tour_card_component.dart';
@@ -45,7 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                    child: const CustomSearchField(),
+                    child: const CustomSearchField(
+                      enabled: false,
+                    ),
                   ),
                   SizedBox(
                     height: 300.h,
@@ -137,6 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+            floatingActionButton: _buildFloatingActionButton(context),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
           );
         },
       ),
@@ -172,6 +178,16 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Image.asset(AppAsset.avatar),
         )
       ],
+    );
+  }
+
+  FloatingActionButtonComponent _buildFloatingActionButton(
+      BuildContext context) {
+    return FloatingActionButtonComponent(
+      btnText: "Customize Trip",
+      callback: () {
+        context.navigateWithSlideBottomToTop(const CustomizedTripScreen());
+      },
     );
   }
 }
