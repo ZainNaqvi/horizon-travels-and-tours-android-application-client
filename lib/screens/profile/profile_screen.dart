@@ -1,4 +1,3 @@
-import 'package:horizon_travel_and_tours_android_application/core/components/drawer_component.dart';
 import 'package:horizon_travel_and_tours_android_application/core/components/text_component.dart';
 import 'package:horizon_travel_and_tours_android_application/screens/customized_trip/customized_trip.dart';
 
@@ -32,28 +31,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: BlocBuilder<CommonCubit, CommonState>(
-        builder: (_, state) {
-          return Scaffold(
-            drawer: const MyDrawer(),
-            backgroundColor: AppColor.white,
-            appBar: _buildAppBar(state, context),
-            body: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 24.h),
-                  _buildButtonsSection(context, state),
-                  _buildDynamicSections(context, state),
-                ],
-              ),
+    return BlocBuilder<CommonCubit, CommonState>(
+      builder: (_, state) {
+        return Scaffold(
+          backgroundColor: AppColor.white,
+          appBar: _buildAppBar(state, context),
+          body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 24.h),
+                _buildButtonsSection(context, state),
+                _buildDynamicSections(context, state),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -62,70 +57,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: AppColor.white,
       elevation: 0,
       title: const TextComponent(
-        text: "Horizon Trips!",
+        text: "User Profile!",
       ),
       systemOverlayStyle: systemOverlaySetting(),
-      actions: [
-        Image.asset(AppAsset.avatar),
-        if (state.userInvites.isNotEmpty)
-          _buildNotificationIcon(
-            context,
-            state.userInvites.length,
-          ),
-        SizedBox(width: 12.w),
-      ],
+   
     );
   }
 
-  Widget _buildNotificationIcon(BuildContext context, int count) {
-    return GestureDetector(
-      onTap: () => context.navigateWithSlideBottomToTop(const InvitesScreen()),
-      child: SizedBox(
-        width: 30.w,
-        height: 30.h,
-        child: Stack(
-          children: [
-            Icon(Icons.notifications, color: Colors.white, size: 30.r),
-            Positioned(
-              right: 0,
-              top: 5,
-              child: Container(
-                width: 15,
-                height: 15,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xffc32c37),
-                  border: Border.all(color: Colors.white, width: 1),
-                ),
-                child: Center(
-                  child: Text(
-                    count.toString(),
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAppLogo() {
-    return Center(
-      child: Image.asset(
-        AppAsset.icon,
-        height: 180.h,
-        width: 180.w,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-
+ 
   Widget _buildButtonsSection(BuildContext context, CommonState state) {
     return Column(
       children: [

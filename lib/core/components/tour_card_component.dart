@@ -5,13 +5,14 @@ class TourCard extends StatelessWidget {
   final String title;
   final String location;
   final String rating;
-
+final double imageHeight;
   const TourCard({
     Key? key,
     required this.imageUrl,
     required this.title,
     required this.location,
     required this.rating,
+    required this.imageHeight,
   }) : super(key: key);
 
   @override
@@ -34,7 +35,7 @@ class TourCard extends StatelessWidget {
                 ),
                 child: Image.network(
                   imageUrl,
-                  height: 224.h,
+                  height: imageHeight,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),

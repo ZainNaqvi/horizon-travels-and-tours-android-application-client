@@ -5,6 +5,7 @@ import 'package:horizon_travel_and_tours_android_application/core/components/sea
 import 'package:horizon_travel_and_tours_android_application/core/components/text_component.dart';
 import 'package:horizon_travel_and_tours_android_application/core/components/tour_card_component.dart';
 import 'package:horizon_travel_and_tours_android_application/screens/customized_trip/customized_trip.dart';
+import 'package:horizon_travel_and_tours_android_application/screens/profile/profile_screen.dart';
 
 import '../../../../exports.dart';
 
@@ -37,48 +38,120 @@ class _HomeScreenState extends State<HomeScreen> {
           return Scaffold(
             drawer: const MyDrawer(),
             appBar: _buildAppBar(state, context),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                  child: CustomSearchField(),
-                ),
-                SizedBox(
-                  height: 300.h,
-                  width: 360.w,
-                  child: ListView.builder(
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                    child: const CustomSearchField(),
+                  ),
+                  SizedBox(
+                    height: 300.h,
+                    width: 360.w,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(left: 16.w, top: 12.h),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.places.length,
+                      itemBuilder: (_, index) {
+                        Place place = state.places[index];
+
+                        return TourCard(
+                          imageHeight: 224.h,
+                          imageUrl: place.imageUrl,
+                          title: place.title,
+                          location: place.subLocation[0],
+                          rating: place.rating,
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      sliderItem(Colors.grey),
+                      SizedBox(width: 4.w),
+                      sliderItem(Colors.blue),
+                      SizedBox(width: 4.w),
+                      sliderItem(Colors.grey),
+                    ],
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Popular Places",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 24.sp,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                "View all",
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16.sp,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  GridView.builder(
                     shrinkWrap: true,
-                    padding: EdgeInsets.only(left: 16.w, top: 12.h),
-                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: state.places.length,
-                    itemBuilder: (_, index) {
-                      Place place = state.places[index];
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 18.0.h,
+                      mainAxisSpacing: 18.0.w,
+                      childAspectRatio: 0.8.r,
+                    ),
+                    itemBuilder: (context, index) {
+                      Place place = state.places[0];
 
                       return TourCard(
+                        imageHeight: 100.h,
                         imageUrl: place.imageUrl,
                         title: place.title,
                         location: place.subLocation[0],
                         rating: place.rating,
                       );
                     },
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                Row(
-                  children: [
-                    CircleAvatar(),
-                  ],
-                ),
-                SizedBox(height: 12.h),
-                Row(
-                  children: [],
-                ),
-              ],
+                  )
+                ],
+              ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Container sliderItem(
+    Color color,
+  ) {
+    return Container(
+      height: 8.h,
+      width: 8.w,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
       ),
     );
   }
@@ -92,8 +165,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       systemOverlayStyle: systemOverlaySetting(),
       actions: [
-        Image.asset(AppAsset.avatar),
-        SizedBox(width: 12.w),
+        IconButton(
+          onPressed: () {
+            context.navigateWithSlideRightToLeft(const ProfileScreen());
+          },
+          icon: Image.asset(AppAsset.avatar),
+        )
       ],
     );
   }
