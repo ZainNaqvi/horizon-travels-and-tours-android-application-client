@@ -75,7 +75,9 @@ class CommonCubit extends Cubit<CommonState> {
     log(filterValue);
     try {
       if (filterField == allowedUsersField) {
-        query = _firebaseFirestore.collection(memoriesCollection).where(filterField, arrayContains: filterValue);
+        query = _firebaseFirestore
+            .collection(memoriesCollection)
+            .where(filterField, arrayContains: filterValue);
       } else {
         query = _firebaseFirestore
             .collection(memoriesCollection)
@@ -90,7 +92,8 @@ class CommonCubit extends Cubit<CommonState> {
 
       return querySnapshot.docs.map((doc) => Memory.fromDocument(doc)).toList();
     } catch (e) {
-      debugPrint('Error fetching memories (Field: $filterField, Value: $filterValue): $e');
+      debugPrint(
+          'Error fetching memories (Field: $filterField, Value: $filterValue): $e');
       return [];
     }
   }
@@ -100,7 +103,8 @@ class CommonCubit extends Cubit<CommonState> {
     final currentUserId = FirebaseAuth.instance.currentUser?.uid;
     if (currentUserId != null) {
       emit(state.copyWith(loading: true));
-      final memories = await _fetchMemories(filterField: allowedUsersField, filterValue: currentUserId);
+      final memories = await _fetchMemories(
+          filterField: allowedUsersField, filterValue: currentUserId);
       emit(state.copyWith(userSharedMemories: memories, loading: false));
     }
   }
@@ -110,7 +114,8 @@ class CommonCubit extends Cubit<CommonState> {
     final currentUserId = FirebaseAuth.instance.currentUser?.uid;
     if (currentUserId != null) {
       emit(state.copyWith(loading: true));
-      final memories = await _fetchMemories(filterField: uidField, filterValue: currentUserId);
+      final memories = await _fetchMemories(
+          filterField: uidField, filterValue: currentUserId);
       emit(state.copyWith(userCreatedMemories: memories, loading: false));
     }
   }
@@ -121,13 +126,32 @@ class CommonCubit extends Cubit<CommonState> {
     if (currentUser != null) {
       try {
         emit(state.copyWith(loading: true));
-        final userDoc = await _firebaseFirestore.collection(userCollection).doc(currentUser.uid).get();
+        final userDoc = await _firebaseFirestore
+            .collection(userCollection)
+            .doc(currentUser.uid)
+            .get();
         final invites = List<String>.from(userDoc.data()?['invites'] ?? []);
         emit(state.copyWith(userInvites: invites, loading: false));
       } catch (e) {
         debugPrint('Error fetching user invites: $e');
         emit(state.copyWith(userInvites: [], loading: false));
       }
+    }
+  }
+
+  /// [Fetch Places]
+  Future<void> fetchPlaces() async {
+    try {
+      emit(state.copyWith(loading: true));
+
+      final snapshot =
+          await FirebaseFirestore.instance.collection('places').get();
+      final places =
+          snapshot.docs.map((doc) => Place.fromJson(doc.data())).toList();
+
+      emit(state.copyWith(loading: false, places: places));
+    } catch (error) {
+      emit(state.copyWith(loading: false));
     }
   }
 

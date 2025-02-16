@@ -4,7 +4,7 @@ class CommonState {
   final bool loading;
   final bool actionCompleted;
   final List<Booking> bookings;
-  final List<Place> placeDetails;
+  final List<Place> places;
   final List<String> userInvites;
   final List<Memory> userSharedMemories;
   final List<Memory> userCreatedMemories;
@@ -13,7 +13,7 @@ class CommonState {
     this.loading = false,
     this.actionCompleted = false,
     this.bookings = const [],
-    this.placeDetails = const [],
+    this.places = const [],
     this.userInvites = const [],
     this.userSharedMemories = const [],
     this.userCreatedMemories = const [],
@@ -23,7 +23,7 @@ class CommonState {
     bool? loading,
     bool? actionCompleted,
     List<Booking>? bookings,
-    List<Place>? placeDetails,
+    List<Place>? places,
     List<String>? userInvites,
     List<Memory>? userSharedMemories,
     List<Memory>? userCreatedMemories,
@@ -32,7 +32,7 @@ class CommonState {
       loading: loading ?? this.loading,
       actionCompleted: actionCompleted ?? this.actionCompleted,
       bookings: bookings ?? this.bookings,
-      placeDetails: placeDetails ?? this.placeDetails,
+      places: places ?? this.places,
       userInvites: userInvites ?? this.userInvites,
       userSharedMemories: userSharedMemories ?? this.userSharedMemories,
       userCreatedMemories: userCreatedMemories ?? this.userCreatedMemories,
@@ -46,7 +46,7 @@ CommonState(
   loading: $loading,
   actionCompleted: $actionCompleted,
   bookings: ${bookings.length},
-  placeDetails: ${placeDetails.length},
+  placeDetails: ${places.length},
   userInvites: ${userInvites.length},
   userSharedMemories: ${userSharedMemories.length},
   userCreatedMemories: ${userCreatedMemories.length}
