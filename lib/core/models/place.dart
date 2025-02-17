@@ -23,15 +23,15 @@ class Place {
 
   factory Place.fromJson(Map<String, dynamic> json) {
     return Place(
-      docId: json['docId'] as String,
-      description: json['description'] as String,
-      duration: List<String>.from(json['duration']),
-      hotels: json['hotels'] as String,
-      imageUrl: json['imageUrl'] as String,
-      rating: json['rating'] as String,
-      reviews: json['reviews'] as String,
-      subLocation: List<String>.from(json['sub_location']),
-      title: json['title'] as String,
+      docId: json['docId'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      duration: (json['duration'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+      hotels: json['hotels'] as String? ?? '',
+      imageUrl: json['imageUrl'] as String? ?? '',
+      rating: json['rating'] as String? ?? '',
+      reviews: json['reviews'] as String? ?? '',
+      subLocation: (json['sub_location'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+      title: json['title'] as String? ?? '',
     );
   }
 

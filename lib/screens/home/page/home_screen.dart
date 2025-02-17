@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:horizon_travel_and_tours_android_application/core/components/drawer_component.dart';
 import 'package:horizon_travel_and_tours_android_application/core/components/floating_action_button_component.dart';
 import 'package:horizon_travel_and_tours_android_application/core/components/search_field_component.dart';
@@ -21,12 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
   late CommonCubit commonCubit;
   @override
   void initState() {
+    super.initState();
     commonCubit = context.read<CommonCubit>();
     getPlaces();
   }
 
   Future<void> getPlaces() async {
     await commonCubit.fetchPlaces();
+    log(commonCubit.state.places.toString());
   }
 
   @override
@@ -43,11 +46,15 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                    child: const CustomSearchField(
-                      enabled: false,
+                  GestureDetector(
+                    onTap: () async {
+                      await getPlaces();
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                      child: const CustomSearchField(
+                        enabled: false,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -83,8 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                     child: Column(
                       children: [
                         Row(
@@ -123,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 18.0.h,
                       mainAxisSpacing: 18.0.w,
-                      childAspectRatio: 0.8.r,
+                      childAspectRatio: 0.75.r,
                     ),
                     itemBuilder: (context, index) {
                       Place place = state.places[0];
@@ -141,8 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             floatingActionButton: _buildFloatingActionButton(context),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           );
         },
       ),
@@ -181,8 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  FloatingActionButtonComponent _buildFloatingActionButton(
-      BuildContext context) {
+  FloatingActionButtonComponent _buildFloatingActionButton(BuildContext context) {
     return FloatingActionButtonComponent(
       btnText: "Customize Trip",
       callback: () {
