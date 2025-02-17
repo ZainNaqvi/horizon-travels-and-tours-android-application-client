@@ -46,15 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () async {
-                      await getPlaces();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                      child: const CustomSearchField(
-                        enabled: false,
-                      ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                    child: const CustomSearchField(
+                      enabled: false,
                     ),
                   ),
                   SizedBox(
@@ -68,12 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (_, index) {
                         Place place = state.places[index];
 
-                        return TourCard(
-                          imageHeight: 224.h,
-                          imageUrl: place.imageUrl,
-                          title: place.title,
-                          location: place.subLocation[0],
-                          rating: place.rating,
+                        return Padding(
+                          padding: EdgeInsets.only(right: 16.w),
+                          child: TourCard(
+                            imageHeight: 224.h,
+                            imageUrl: place.imageUrl,
+                            title: place.title,
+                            location: place.subLocation[0],
+                            rating: place.rating,
+                          ),
                         );
                       },
                     ),
@@ -132,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       childAspectRatio: 0.75.r,
                     ),
                     itemBuilder: (context, index) {
-                      Place place = state.places[0];
+                      Place place = state.places[index];
 
                       return TourCard(
                         imageHeight: 100.h,
