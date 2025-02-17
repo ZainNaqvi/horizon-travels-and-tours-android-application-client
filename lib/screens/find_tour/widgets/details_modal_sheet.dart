@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../exports.dart'; // Adjust the imports accordingly.
+import '../../../exports.dart';
 
 void showInfoModal(BuildContext context) {
   showModalBottomSheet(

@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:horizon_travel_and_tours_android_application/screens/home/page/view_shared_memory_images.dart';
-
 import '../../../exports.dart';
 
 class MyCreatedMemories extends StatefulWidget {

@@ -26,6 +26,11 @@ export 'package:horizon_travel_and_tours_android_application/core/components/app
 export 'package:horizon_travel_and_tours_android_application/core/components/app_logo.dart';
 export 'package:horizon_travel_and_tours_android_application/core/components/custom_button.dart';
 export 'package:horizon_travel_and_tours_android_application/core/components/social_media_button_component.dart';
+export 'package:horizon_travel_and_tours_android_application/core/components/drawer_component.dart';
+export 'package:horizon_travel_and_tours_android_application/core/components/floating_action_button_component.dart';
+export 'package:horizon_travel_and_tours_android_application/core/components/search_field_component.dart';
+export 'package:horizon_travel_and_tours_android_application/core/components/text_component.dart';
+export 'package:horizon_travel_and_tours_android_application/core/components/tour_card_component.dart';
 
 // Screens
 export 'package:horizon_travel_and_tours_android_application/screens/auth/pages/signup_page.dart';
@@ -42,6 +47,9 @@ export 'package:horizon_travel_and_tours_android_application/screens/memory/send
 export 'package:horizon_travel_and_tours_android_application/screens/home/page/invites_page.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/home/page/current_user_created_memories_page.dart';
 export 'package:horizon_travel_and_tours_android_application/screens/memory/edit_memory_page.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/customized_trip/customized_trip.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/profile/profile_screen.dart';
+export 'package:horizon_travel_and_tours_android_application/screens/home/page/view_shared_memory_images.dart';
 
 // Utils
 export 'package:horizon_travel_and_tours_android_application/core/utils/navigator_util.dart';

@@ -1,14 +1,4 @@
 import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
-import 'package:horizon_travel_and_tours_android_application/core/components/drawer_component.dart';
-import 'package:horizon_travel_and_tours_android_application/core/components/floating_action_button_component.dart';
-import 'package:horizon_travel_and_tours_android_application/core/components/search_field_component.dart';
-import 'package:horizon_travel_and_tours_android_application/core/components/text_component.dart';
-import 'package:horizon_travel_and_tours_android_application/core/components/tour_card_component.dart';
-import 'package:horizon_travel_and_tours_android_application/screens/customized_trip/customized_trip.dart';
-import 'package:horizon_travel_and_tours_android_application/screens/profile/profile_screen.dart';
-
 import '../../../../exports.dart';
 
 class HomeScreen extends StatefulWidget {
